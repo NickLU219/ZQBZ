@@ -3,30 +3,48 @@ import { StyleSheet, Text, Image, View } from 'react-native';
 
 import MainTabbar from '../js/MainTabbar'
 import LoginPage from '../js/login'
+import { connect } from 'react-redux'
 
-export default class InitPage extends React.Component {
+class InitPage extends React.Component {
     constructor(props){
 		super(props);
-		this.state = {
-			login: false
-		}
+		const {login,userinfo,token} = this.props
+		this.state = (
+			{
+				login: login,
+				token: token,
+				userinfo: userinfo
+			}
+		)
+	}
+
+	shouldComponentUpdate(next) {
+		console.log("shouldComponentUpdate")
+		return true
 	}
 
 	render() {
-		console.log("aaa")
-		if (this.state.login){
-
-		console.log("bbb")
+		const {login,userinfo,token} = this.props
+		console.log(login)
+		if (login){
 			return (
 				<MainTabbar/>
 			);
 		}
 		else {
-
-		console.log("ccc")
 			return (
 				<LoginPage/>
 			)
 		}
 	}
 }
+
+export default connect(
+	(state) => (
+		{
+			login: state.homeReducer.login,
+			userinfo: state.homeReducer.userinfo,
+			token: state.homeReducer.token
+		}
+	)
+)(InitPage)
