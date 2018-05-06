@@ -59,7 +59,7 @@ export default class ApplyPage extends React.Component{
                     arrow="horizontal"
                     extra={
                         <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}}> 请选择领用部门 </Text>
+                            <Text style={{color:"#ccc"}} onp> 请选择领用部门 </Text>
                         </View>
                     }>
                     领用部门

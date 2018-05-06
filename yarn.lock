@@ -4543,7 +4543,7 @@ react-native-swipeout@^2.2.2:
   dependencies:
     prop-types "^15.6.0"
 
-react-native@0.55.3:
+react-native@^0.55.3:
   version "0.55.3"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.55.3.tgz#6ff1691bd0645d0480fba16377edb9dce5bd28c4"
   dependencies:

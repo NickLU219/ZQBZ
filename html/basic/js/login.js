@@ -26,7 +26,7 @@ class LoginPage extends React.Component {
                 </View>
                 <WhiteSpace/>
                 <InputItem
-                style={{marginLeft: 30, marginRight: 30}}
+                style={{marginLeft: 40, marginRight: 40}}
                     clear
                     // onErrorPress={}
                     value=""
