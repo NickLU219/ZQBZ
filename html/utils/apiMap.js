@@ -16,10 +16,10 @@ export default API = {
         get: server.host+server.port+"/app/sqfire/aisearch/aiGetList",
         borrow:server.host+server.port+"/app/sqfire/aisearch/aiExchangeList",
         return:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
-        change:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
+        change:server.host+server.port+"/app/sqfire/aisearch/aiScrapList",
         repiar:server.host+server.port+"/app/sqfire/aisearch/aiFixList",
         deal:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
-        search:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
+        search:server.host+server.port+"/app/sqfire/aisearch/aiScrapInfoList",
         mine:server.host+server.port+"/app/sqfire/aisearch/aiGetList"
     }
 }

@@ -19,13 +19,11 @@ class InitPage extends React.Component {
 	}
 
 	shouldComponentUpdate(next) {
-		console.log("shouldComponentUpdate")
 		return true
 	}
 
 	render() {
 		const {login,userinfo,token} = this.props
-		console.log(login)
 		if (login){
 			return (
 				<MainTabbar/>

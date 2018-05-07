@@ -6,6 +6,7 @@ import Echarts from 'native-echarts'
 import { StackNavigator } from 'react-navigation';
 
 import GridPage from './gridPage'
+import ApplyPage from '../../search/js/applyPage';
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -414,6 +415,12 @@ export default StackNavigator(
             screen: GridPage,
 			navigationOptions:{
                 headerTitle: "我的资产"
+            }
+        },
+        Apply: {
+            screen: ApplyPage,
+            navigationOptions:{
+                headerTitle: "资产领用"
             }
         }
     },
