@@ -4,13 +4,13 @@ import { List, WhiteSpace } from 'antd-mobile'
 
 import ImagePicker from 'react-native-image-picker'
 
-
 export default class ApplyPage extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
             avatarSource: require("../img/upload.png")
         };
+        
         //图片选择器参数设置
         this.options = {
             title: '请选择图片来源',
@@ -44,22 +44,32 @@ export default class ApplyPage extends React.Component{
             }
         })
     }
+    getDept = () => {
+        console.log("获取领用部门")
+        this.props.navigation.navigate("Commonlist", {key: "dept"})
+    }
+    getPerson = () => {
+        console.log("获取领用人")
+        this.props.navigation.navigate("Commonlist", {key: "user"})
+    }
 	render() {
+        const {dept,user } = this.props.navigation.state.params
+        // console.log(dept, user)
 		return (
 			<List renderHeader={()=>{}}>
                 <List.Item
-                    extra={ <Text>宿迁支队</Text> }>
+                    extra={ <Text>{dept}</Text> }>
                     原始部门
                 </List.Item>
                 <List.Item
-                    extra={ <Text>柳冲</Text> }>
+                    extra={ <Text>{user}</Text> }>
                     原始使用人
                 </List.Item>
                 <List.Item
                     arrow="horizontal"
                     extra={
                         <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}} onp> 请选择领用部门 </Text>
+                            <Text style={{color:"#ccc"}} onPress={this.getDept}> 请选择领用部门 </Text>
                         </View>
                     }>
                     领用部门
@@ -68,7 +78,7 @@ export default class ApplyPage extends React.Component{
                     arrow="horizontal"
                     extra={
                         <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
+                            <Text style={{color:"#ccc"}} onPress={this.getPerson}> 请选择领用人 </Text>
                         </View>
                     }>
                     领用人

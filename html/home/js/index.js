@@ -6,7 +6,11 @@ import Echarts from 'native-echarts'
 import { StackNavigator } from 'react-navigation';
 
 import GridPage from './gridPage'
-import ApplyPage from '../../search/js/applyPage';
+import ApplyPage from './applyPage';
+import FixPage from './fixPage'
+import ScrapPage from './scrapPage'
+import CommonList from './conmonlist'
+import { connect } from 'react-redux'
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -24,7 +28,7 @@ class HomePage extends React.Component {
                     showsVerticalScrollIndicator={false}
                     endFillColor="black">
                     <SafeAreaView/>                     
-                    <HomeHeader />
+                    <HomeHeaderComponent />
                     <WhiteSpace />
                     <HomeGrid props={{...this.props}} />
                     <WhiteSpace />
@@ -44,16 +48,22 @@ class HomePage extends React.Component {
 
 class HomeHeader extends React.Component {
     render() {
+        const {userinfo} = this.props
         return (
             <View style={style.homeHeaderView}>
                 <Image source={require('../img/top_bg.png')} style={style.homeHeaderBg} />
                 <Text style={style.homeHeaderTitle}>首页</Text>
                 <Image source={require('../img/home_icon.png')} style={style.homeHeaderIcon} />
-                <Text style={style.homeHeaderAvater}>宿迁支队管理员(8532)</Text>
+                <Text style={style.homeHeaderAvater}>{userinfo.oeName}({userinfo.oeCode})</Text>
             </View>
         );
     }
 }
+let HomeHeaderComponent = connect(
+    state=>(
+        {userinfo: state.homeReducer.userinfo}
+    )
+)(HomeHeader)
 
 class HomeGrid extends React.Component {
     constructor(props) {
@@ -63,11 +73,11 @@ class HomeGrid extends React.Component {
     _gridJump = (el, index) => {
         switch (el.text) {
             case "资产领用": this.props.props.navigation.navigate("Get", {key: "Get"});break;            
-            case "资产借用": this.props.props.navigation.navigate("Borrow", {key: "Borrow"});break;
-            case "资产归还": this.props.props.navigation.navigate("Return", {key: "Return"});break;
+            // case "资产借用": this.props.props.navigation.navigate("Borrow", {key: "Borrow"});break;
+            case "资产转让": this.props.props.navigation.navigate("Return", {key: "Return"});break;
             case "资产变更": this.props.props.navigation.navigate("Change", {key: "Change"});break;
-            case "资产维修": this.props.props.navigation.navigate("Repair", {key: "Repair"});break;
-            case "资产处置": this.props.props.navigation.navigate("Deal", {key: "Deal"});break;
+            case "资产维修": this.props.props.navigation.navigate("Repiar", {key: "Repiar"});break;
+            case "资产报废": this.props.props.navigation.navigate("Deal", {key: "Deal"});break;
             case "资产自查": this.props.props.navigation.navigate("Search", {key: "Search"});break;
             case "我的资产": this.props.props.navigation.navigate("Mine", {key: "Mine"});break;
         }
@@ -80,7 +90,7 @@ class HomeGrid extends React.Component {
             },
             {
                 icon: <Image source={require('../img/list02.png')}/>,
-                text: '资产归还'
+                text: '资产转让'
             },
             {
                 icon: <Image source={require('../img/list03.png')}/>,
@@ -92,7 +102,7 @@ class HomeGrid extends React.Component {
             },
             {
                 icon: <Image source={require('../img/list05.png')}/>,
-                text: '资产处置'
+                text: '资产报废'
             },
             {
                 icon: <Image source={require('../img/list06.png')}/>,
@@ -384,7 +394,7 @@ export default StackNavigator(
         Return: {
             screen: GridPage,
 			navigationOptions:{
-                headerTitle: "资产归还"
+                headerTitle: "资产转让"
             }
         },
         Change: {
@@ -393,7 +403,7 @@ export default StackNavigator(
                 headerTitle: "资产变更"
             }
         },
-        Repair: {
+        Repiar: {
             screen: GridPage,
 			navigationOptions:{
                 headerTitle: "资产维修"
@@ -402,7 +412,7 @@ export default StackNavigator(
         Deal: {
             screen: GridPage,
 			navigationOptions:{
-                headerTitle: "资产处置"
+                headerTitle: "资产报废"
             }
         },
         Search: {
@@ -417,10 +427,29 @@ export default StackNavigator(
                 headerTitle: "我的资产"
             }
         },
+
         Apply: {
             screen: ApplyPage,
             navigationOptions:{
-                headerTitle: "资产领用"
+                headerTitle: "领用"
+            }
+        },
+        Fix: {
+            screen: FixPage,
+            navigationOptions:{
+                headerTitle: "维修"
+            }
+        },
+        Commonlist: {
+            screen: CommonList,
+            navigationOptions:{
+                headerTitle: "请选择"
+            }
+        },
+        Scrap: {
+            screen: ScrapPage,
+            navigationOptions:{
+                headerTitle: "报废"
             }
         }
     },
@@ -443,9 +472,11 @@ const style = StyleSheet.create({
         alignSelf: "center"
     },
     homeHeaderAvater: {
+        // alignSelf:'center',s
+        width: 150,
         fontSize: 18, 
         color: "black", 
-        top: 150, left: 30
+        top: 150, left: 40
     },
     homeHeaderBg: {
         width: '100%', 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
-import { Icon, WhiteSpace, Card } from 'antd-mobile';
+import { View, Text, FlatList, Image, StyleSheet, Button, TouchableHighlight } from 'react-native';
+import { Icon, WhiteSpace, Card, SearchBar } from 'antd-mobile';
 import { StackNavigator } from 'react-navigation';
 
 // import ApplyPage from './applyPage'
-import SearchPage from './searchPage'
+import InfoPage from './infoPage'
 import API from '../../utils/apiMap'
-import { connect} from 'react-redux';
+import { connect} from 'react-redux'
 
 import { getNewData } from '../action' 
 
@@ -15,10 +15,18 @@ class MyList extends React.Component {
 		super(props)
 		const { getNewData,userinfo,token } = this.props
 		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId})
-		// getNewData(API.zichan_list_tmp)
-		
-		
 	}
+	state = {
+		value: '美食',
+	  };
+	
+	  onChange = (value) => {
+		this.setState({ value });
+	  }
+	
+	  clear = () => {
+		this.setState({ value: '' });
+	  }
 	shouldComponentUpdate(next) {
 		// console.log("shouldComponentUpdate",next)
 		if (next.rows === this.props.rows)
@@ -28,39 +36,54 @@ class MyList extends React.Component {
 	render() {
 		const {rows} = this.props
 		return (
-			<FlatList
-			style={{backgroundColor: "#e0e0e0"}}
-			ItemSeparatorComponent={()=>(<View style={{height:8, backgroundColor:"#e0e0e0"}}></View>)}
-			data={rows}
-			renderItem={
-				({item}) => (
-						<View style={{flex:1,flexDirection:"column", backgroundColor:"white"}}>
-							<View style={{height:30,flex:1,flexDirection:"row",alignItems:"center"}}>
-								<Text style={{fontSize:15,flex:4,color:"black",marginLeft:20}}>资产编号：{item.aiCode}</Text>
-								{/* <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply")}>申请领用</Text> */}
+			<View>
+				<SearchBar
+				value={this.state.value}
+				placeholder="搜索"
+				onSubmit={(value) => Alert.alert(value)}
+				onCancel={this.clear}
+				onChange={this.onChange}
+				showCancelButton
+				/>
+				<FlatList
+				// ListHeaderComponent={()=> (<View style={{height:0, backgroundColor:"#e0e0e0"}}></View>)}
+				// ListHeaderComponent= {()=> <Text style={[styles.txt,{backgroundColor:'black'}]}>这是头部</Text>}
+				style={{backgroundColor: "#e0e0e0"}}
+				ItemSeparatorComponent={()=>(<View style={{height:8, backgroundColor:"#e0e0e0"}}></View>)}
+				data={rows}
+				renderItem={
+					({item}) => (
+							<View style={{flex:1,flexDirection:"column", backgroundColor:"white"}}>
+								<View style={{height:30,flex:1,flexDirection:"row",alignItems:"center"}}>
+									<Text style={{fontSize:15,flex:4,color:"black",marginLeft:20}}>资产编号：{item.aiCode}</Text>
+									{/* <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply")}>申请领用</Text> */}
+								</View>
+								<View style={{height:1,backgroundColor:"#eee"}}></View>
+								<TouchableHighlight underlayColor="transparent"
+									onPress={()=> {this.props.navigation.navigate("Info", {key: item.aiId})}}>
+									<View style={{ flex:1, flexDirection:"column"}}>
+										<View style={{height:30, flex:1, flexDirection:"row",alignItems:"center"}}>
+											<View style={{flex:1}}></View>
+											<Text style={{flex:6}}>资产名称：<Text>{item.aiName}</Text></Text>
+											<Text style={{flex:6}}>管理部门：<Text>{item.aiManageDept}</Text></Text>
+										</View>
+										<View style={{height:30, flex:1, flexDirection:"row",alignContent:"center"}}>
+											<View style={{flex:1}}></View>
+											<Text style={{flex:6}}>使用部门：<Text>{item.aiUseDept}</Text></Text>
+											<Text style={{flex:6}}>使用人：<Text>{item.aiUsePerson}</Text></Text>
+										</View>
+										<View style={{flex:1,flexDirection:"row",height:30,backgroundColor:"#f0f0f0",alignItems:"center"}}>
+											<View style={{flex:1}}></View>
+											<Text style={{flex:10}}>使用状况：{item.aiUseStateName}</Text>
+											<Text style={{flex:6}}>位置：{item.aiPlaceName}</Text>
+											{/* <Text style={{flex:4}} onPress={()=>{}}>领用记录</Text> */}
+										</View>
+									</View>
+								</TouchableHighlight>
 							</View>
-							<View style={{height:1,backgroundColor:"#eee"}}></View>
-							<View style={{ flex:1, flexDirection:"column"}}>
-								<View style={{height:30, flex:1, flexDirection:"row",alignItems:"center"}}>
-									<View style={{flex:1}}></View>
-									<Text style={{flex:6}}>资产名称：<Text>{item.aiName}</Text></Text>
-									<Text style={{flex:6}}>管理部门：<Text>{item.aiManageDept}</Text></Text>
-								</View>
-								<View style={{height:30, flex:1, flexDirection:"row",alignContent:"center"}}>
-									<View style={{flex:1}}></View>
-									<Text style={{flex:6}}>使用部门：<Text>{item.aiUseDept}</Text></Text>
-									<Text style={{flex:6}}>使用人：<Text>{item.aiUsePerson}</Text></Text>
-								</View>
-								<View style={{flex:1,flexDirection:"row",height:30,backgroundColor:"#f0f0f0",alignItems:"center"}}>
-									<View style={{flex:1}}></View>
-									<Text style={{flex:10}}>使用状况：{item.aiUseStateName}</Text>
-									<Text style={{flex:6}}>位置：{item.aiPlaceName}</Text>
-									{/* <Text style={{flex:4}} onPress={()=>{}}>领用记录</Text> */}
-								</View>
-							</View>
-						</View>
-				)}
-			/>
+					)}
+				/>
+			</View>
 		);
 	}
 }
@@ -85,21 +108,12 @@ export default StackNavigator(
 			navigationOptions:{
 				headerTitle:'资产列表',
 				headerBackTitle:null,
-				headerRight: <TouchableHighlight 
-								onPress={()=> {
-									console.log(this.props);
-									// this.props.navigation.navigate("Search")
-								}}
-								underlayColor="white">
-								<Image source={require('../img/search.png')} 
-									style={{ height:25, width:25, marginRight: 15 }}/>
-							</TouchableHighlight>
 			} 
 		},
-		Search: { 
-			screen: SearchPage,
+		Info: { 
+			screen: InfoPage,
 			navigationOptions:{
-				headerTitle:'资产查询',
+				headerTitle:'资产信息',
 				headerBackTitle:null,
 			}
 		},
@@ -112,3 +126,12 @@ export default StackNavigator(
 	}
 );
 
+// const styles=StyleSheet.create({
+//     txt: {
+//         textAlign: 'center',
+//         textAlignVertical: 'center',
+//         color: 'white',
+//         fontSize: 30,
+//     }
+
+// })

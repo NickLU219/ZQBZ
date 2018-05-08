@@ -12,13 +12,16 @@ export default API = {
     user_login: server.host+server.port+"/app/sqfire/user/info",
     zichan_list: server.host+server.port+"/app/sqfire/aisearch/list",
     zichan_info: server.host+server.port+"/app/sqfire/aisearch/AiInfo",
+    dept_list: server.host+server.port+"/app/sqfire/user/dwdept",
+    user_list: server.host+server.port+"/app/sqfire/user/deptuser",
     homeGrid: {
         get: server.host+server.port+"/app/sqfire/aisearch/aiGetList",
         borrow:server.host+server.port+"/app/sqfire/aisearch/aiExchangeList",
-        return:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
-        change:server.host+server.port+"/app/sqfire/aisearch/aiScrapList",
+        return:server.host+server.port+"/app/sqfire/op/aiMakeOverSave",
+
+        change:server.host+server.port+"/app/sqfire/aisearch/aiChangeList",
         repiar:server.host+server.port+"/app/sqfire/aisearch/aiFixList",
-        deal:server.host+server.port+"/app/sqfire/aisearch/aiGetList",
+        deal:server.host+server.port+"/app/sqfire/aisearch/aiScrapList",
         search:server.host+server.port+"/app/sqfire/aisearch/aiScrapInfoList",
         mine:server.host+server.port+"/app/sqfire/aisearch/aiGetList"
     }
