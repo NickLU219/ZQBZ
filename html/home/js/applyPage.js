@@ -1,16 +1,32 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace } from 'antd-mobile'
+import { List, WhiteSpace, Button } from 'antd-mobile'
 
 import ImagePicker from 'react-native-image-picker'
+import { connect } from 'react-redux'
+import { SubmitApply } from '../action'
+import API from '../../utils/apiMap';
 
-export default class ApplyPage extends React.Component{
+class ApplyPage extends React.Component{
     constructor(props) {
         super(props)
+        const {item} = this.props.navigation.state.params
+        const {token} = this.props
         this.state = {
-            avatarSource: require("../img/upload.png")
+            avatarSource: require("../img/upload.png"),
+            params: {
+                aiID: item.aiID,
+                token: token,
+                agiUsePersonBefore: item.aiUsePersonId,
+                agiUseDeptBefore:item.aiUseDeptId,
+                agiGetPerson:"",
+                agiGetDept:"",
+                agiGetPersonName:"领用人姓名",
+                agiGetDeptName:"领用部门姓名",
+                agiGetRemark:"",
+                agiGetTime: (new Date()).toLocaleDateString(),
+            }
         };
-        
         //图片选择器参数设置
         this.options = {
             title: '请选择图片来源',
@@ -26,7 +42,7 @@ export default class ApplyPage extends React.Component{
       //选择照片按钮点击
     choosePic() {
         ImagePicker.showImagePicker(this.options, (response) => {
-            console.log('Response = ', response);
+            // console.log('Response = ', response);
 
             if (response.didCancel) {
                 console.log('用户取消了选择！');
@@ -39,7 +55,8 @@ export default class ApplyPage extends React.Component{
                 // You can also display the image using data:
                 let source = { uri: 'data:image/jpeg;base64,' + response.data };
                 this.setState({
-                    avatarSource: source
+                    avatarSource: source,
+                    agiGetRemark, source
                 });
             }
         })
@@ -52,8 +69,19 @@ export default class ApplyPage extends React.Component{
         console.log("获取领用人")
         this.props.navigation.navigate("Commonlist", {key: "user"})
     }
+    submit() {
+        const {submitApply} = this.props
+        console.log(submitApply)
+        const url = API.doOperation.apply
+        const {item} = this.props.navigation.state.params
+        const params = this.state.params
+        submitApply(url, params)
+    }
 	render() {
-        const {dept,user } = this.props.navigation.state.params
+        const {item} = this.props.navigation.state.params
+        const dept = item.aiUseDept
+        const user = item.aiUsePerson
+        
         // console.log(dept, user)
 		return (
 			<List renderHeader={()=>{}}>
@@ -84,12 +112,16 @@ export default class ApplyPage extends React.Component{
                     领用人
                 </List.Item>
                 <List.Item
-                    extra="2018.04.26">
+                    extra={<Text>{this.state.agiGetTime}</Text>}>
                     领用时间
                 </List.Item>
+                {/* <Text>领用凭证</Text> */}
                 <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
                     <Image source={this.state.avatarSource} width="100%" style={styles.image} />
                 </TouchableHighlight>
+                <WhiteSpace/>
+                <WhiteSpace/>
+                <Button type="primary" onClick={this.submit()}>提交</Button>
             </List>
 		)
 	}
@@ -102,3 +134,12 @@ const styles = StyleSheet.create({
         alignSelf:'center',
     },
 });
+
+export default connect(
+    state => ({
+        token: state.homeReducer.token
+    }),
+    dispatch => ({
+		submitApply: (url,params) => {dispatch(SubmitApply(url,params))}
+    })
+)(ApplyPage)

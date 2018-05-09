@@ -21,11 +21,11 @@ export const doUserLogin= (url,params)=>(dispatch, getState) => {
                 response.json()
             ))
             .then((responseText)=>{
-                // console.log(responseText)
+                console.log(responseText)
                 dispatch(UserLogin(responseText.data, responseText.token, true))  
             })
             .catch((error)=> {
-                // console.log(error)
+                console.log(error)
                 dispatch(UserLogin({}, "",false))  
             })
             // fetch(url+searchData)

@@ -9,6 +9,8 @@ import GridPage from './gridPage'
 import ApplyPage from './applyPage';
 import FixPage from './fixPage'
 import ScrapPage from './scrapPage'
+import ChangePage from './change'
+import MakeOverPage from './makeover'
 import CommonList from './conmonlist'
 import { connect } from 'react-redux'
 
@@ -450,6 +452,18 @@ export default StackNavigator(
             screen: ScrapPage,
             navigationOptions:{
                 headerTitle: "报废"
+            }
+        },
+        ChangeAction: {
+            screen: ChangePage,
+            navigationOptions:{
+                headerTitle: "变更"
+            }
+        },
+        Makeover: {
+            screen: MakeOverPage,
+            navigationOptions:{
+                headerTitle: "转让"
             }
         }
     },

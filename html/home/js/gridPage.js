@@ -19,7 +19,7 @@ class GridPage extends React.Component {
         switch (key){
             case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token});};break
             // case "borrow": getNewData(API.homeGrid.borrow);break
-            case "Return": getNewData(API.homeGrid.borrow,{aiUseDw: userinfo.odDwId,token:token});break
+            case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
             case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Deal": {getNewData(API.homeGrid.deal,{aiUseDw: userinfo.odDwId,token:token});};break
@@ -32,17 +32,17 @@ class GridPage extends React.Component {
         return true
     }
     button = (key,item)=> {switch(key) {
-        case "Get": return <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply", {dept:item.aiUseDept,user:item.aiUsePerson})}>申请领用</Text>
-        case "Repiar": return <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Fix", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产维修</Text>
-        case "Deal": return <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Scrap", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产报废</Text>    
-        case "Return": return <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Scrap", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产报废</Text>    
-        case "Change": return <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Scrap", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产报废</Text>    
+        case "Get": return <Text style={{fontSize:15,flex:1.3,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply", {item})}>申请领用</Text>
+        case "Repiar": return <Text style={{fontSize:15,flex:1.3,color:"blue"}} onPress={()=>this.props.navigation.navigate("Fix", {item})}>资产维修</Text>
+        case "Deal": return <Text style={{fontSize:15,flex:1.3,color:"blue"}} onPress={()=>this.props.navigation.navigate("Scrap", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产报废</Text>    
+        case "Return": return <Text style={{fontSize:15,flex:1.3,color:"blue"}} onPress={()=>this.props.navigation.navigate("Makeover", {dept:item.aiUseDept,user:item.aiUsePerson})}>资产转让</Text>    
+        case "Change": return <Text style={{fontSize:15,flex:1.3,color:"blue"}} onPress={()=>this.props.navigation.navigate("ChangeAction", {item})}>资产变更</Text>    
                 
     }}
     render() {
         const {rows, navigation} = this.props;
         const {key} = navigation.state.params
-        console.log("kkey", key)
+        // console.log("kkey", key)
         
         return (
 			<FlatList

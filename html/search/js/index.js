@@ -43,7 +43,7 @@ class MyList extends React.Component {
 				onSubmit={(value) => Alert.alert(value)}
 				onCancel={this.clear}
 				onChange={this.onChange}
-				showCancelButton
+				// showCancelButton
 				/>
 				<FlatList
 				// ListHeaderComponent={()=> (<View style={{height:0, backgroundColor:"#e0e0e0"}}></View>)}

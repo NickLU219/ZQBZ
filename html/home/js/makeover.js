@@ -7,16 +7,12 @@ export default class ScrapPage extends React.Component {
     return (
         <List renderHeader={()=>{}}>
             <List.Item
-                extra={ <TextInput></TextInput> }>
-                维修原因
+                extra={ <Text></Text> }>
+                转让原因
             </List.Item>
             <List.Item
                 extra={ <Text></Text> }>
-                维修内容
-            </List.Item>
-            <List.Item
-                extra={ <Text></Text> }>
-                维修时间
+                转让时间
             </List.Item>
             <List.Item
                 arrow="horizontal"
@@ -25,7 +21,7 @@ export default class ScrapPage extends React.Component {
                         <Text style={{color:"#ccc"}} > 请选择领用部门 </Text>
                     </View>
                 }>
-                维修部门
+                转让部门
             </List.Item>
             <List.Item
                 arrow="horizontal"
@@ -34,7 +30,7 @@ export default class ScrapPage extends React.Component {
                         <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
                     </View>
                 }>
-                维修人
+                转让人员
             </List.Item>
         </List>
     );
