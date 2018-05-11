@@ -30,7 +30,7 @@ class LoginPage extends React.Component {
                 style={{marginLeft: 40, marginRight: 40}}
                     clear
                     // onErrorPress={}
-                    value=""
+                    // value=""
                     onChange={(value) => {
                         this.setState({
                             userid: value

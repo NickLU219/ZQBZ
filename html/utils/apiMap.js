@@ -1,8 +1,8 @@
 const server={
-    host: "http://192.168.0.104",
-    port: ":8089"
-    // host: "http://1808399kb5.iask.in",
-    // port: ":18644"
+    // host: "http://192.168.0.104",
+    // port: ":8089"
+    host: "http://1808399kb5.iask.in",
+    port: ":18644"
 }
 
 const aiUsePersonId= ["0001A410000000002JEQ" , "0001A410000000002JBP", "0001A410000000002JC3"]
@@ -32,8 +32,8 @@ export default API = {
         change:server.host+server.port+"/app/sqfire/aisearch/aiChangeList",
         repiar:server.host+server.port+"/app/sqfire/aisearch/aiFixList",
         deal:server.host+server.port+"/app/sqfire/aisearch/aiScrapList",
-        search:server.host+server.port+"/app/sqfire/aisearch/aiScrapInfoList",
-        mine:server.host+server.port+"/app/sqfire/aisearch/aiGetList"
+        search:server.host+server.port+"/app/sqfire/aisearch/list",
+        mine:server.host+server.port+"/app/sqfire/aisearch/list"
     },
     doOperation: {
         apply: server.host+server.port+"/app/sqfire/op/aiGetAdd",

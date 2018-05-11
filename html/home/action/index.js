@@ -25,7 +25,7 @@ export const getNewData= (url,params)=>(dispatch, getState) => {
             })
             .then((response)=> response.json())
             .then((responseText)=>{
-                // console.log("responseText",responseText)
+                console.log("responseText",responseText)
                 dispatch(getNewDataAction(responseText.pageUtils.rows, responseText.token))  
             })
             .catch((error)=> console.log("failed",error))

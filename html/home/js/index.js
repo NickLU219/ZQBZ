@@ -11,7 +11,7 @@ import FixPage from './fixPage'
 import ScrapPage from './scrapPage'
 import ChangePage from './change'
 import MakeOverPage from './makeover'
-import CommonList from './conmonlist'
+import InfoPage from '../../search/js/infoPage'
 import { connect } from 'react-redux'
 
 const Item = List.Item;
@@ -80,8 +80,8 @@ class HomeGrid extends React.Component {
             case "资产变更": this.props.props.navigation.navigate("Change", {key: "Change"});break;
             case "资产维修": this.props.props.navigation.navigate("Repiar", {key: "Repiar"});break;
             case "资产报废": this.props.props.navigation.navigate("Deal", {key: "Deal"});break;
-            // case "资产自查": this.props.props.navigation.navigate("Search", {key: "Search"});break;
-            // case "我的资产": this.props.props.navigation.navigate("Mine", {key: "Mine"});break;
+            case "资产自查": this.props.props.navigation.navigate("Search", {key: "Search"});break;
+            case "我的资产": this.props.props.navigation.navigate("Mine", {key: "Mine"});break;
         }
     }
     render() {
@@ -442,12 +442,12 @@ export default StackNavigator(
                 headerTitle: "维修"
             }
         },
-        Commonlist: {
-            screen: CommonList,
-            navigationOptions:{
-                headerTitle: "请选择"
-            }
-        },
+        // Commonlist: {
+        //     screen: CommonList,
+        //     navigationOptions:{
+        //         headerTitle: "请选择"
+        //     }
+        // },
         Scrap: {
             screen: ScrapPage,
             navigationOptions:{
@@ -465,7 +465,14 @@ export default StackNavigator(
             navigationOptions:{
                 headerTitle: "转让"
             }
-        }
+        },
+        Info: { 
+			screen: InfoPage,
+			navigationOptions:{
+				headerTitle:'资产信息',
+				headerBackTitle:null,
+			}
+		},
     },
     {
 		initialRouteName: 'Home',
