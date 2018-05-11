@@ -17,38 +17,42 @@ class MyList extends React.Component {
 		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId})
 	}
 	state = {
-		value: '美食',
-	  };
-	
-	  onChange = (value) => {
-		this.setState({ value });
-	  }
-	
-	  clear = () => {
-		this.setState({ value: '' });
-	  }
+		aiName: '',
+	};
+
+	onChange = (aiName) => {
+		this.setState({ aiName });
+	}
+
+	clear = () => {
+		this.setState({ aiName: '' });
+	}
 	shouldComponentUpdate(next) {
 		// console.log("shouldComponentUpdate",next)
 		if (next.rows === this.props.rows)
 			return false
 		else return true
 	}
+	getNewDataWithSearch = (value) => {
+		const { getNewData,userinfo,token } = this.props
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName})
+	}
 	render() {
 		const {rows} = this.props
 		return (
 			<View>
 				<SearchBar
-				value={this.state.value}
+				value={this.state.aiName}
 				placeholder="搜索"
-				onSubmit={(value) => Alert.alert(value)}
+				onSubmit={this.getNewDataWithSearch}
 				onCancel={this.clear}
 				onChange={this.onChange}
 				// showCancelButton
 				/>
 				<FlatList
-				// ListHeaderComponent={()=> (<View style={{height:0, backgroundColor:"#e0e0e0"}}></View>)}
-				// ListHeaderComponent= {()=> <Text style={[styles.txt,{backgroundColor:'black'}]}>这是头部</Text>}
-				style={{backgroundColor: "#e0e0e0"}}
+				style={{backgroundColor: "#e0e0e0",height:"100%"}}
+				automaticallyAdjustContentInsets={false}
+				contentContainerStyle={{ paddingBottom: 100 }}
 				ItemSeparatorComponent={()=>(<View style={{height:8, backgroundColor:"#e0e0e0"}}></View>)}
 				data={rows}
 				renderItem={
@@ -83,6 +87,7 @@ class MyList extends React.Component {
 							</View>
 					)}
 				/>
+				{/* <View style={{height:40,width:"100%"}}></View> */}
 			</View>
 		);
 	}

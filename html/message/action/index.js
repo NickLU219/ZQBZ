@@ -1,6 +1,7 @@
-const UserLogin = (userinfo,token,login) => ({type: "LOGIN",userinfo, token, login})
+const getDataAction = (rows, token) => ({type: "GET_DATA",rows,token})
 
-export const doUserLogin= (url,params)=>(dispatch, getState) => {
+export const getData= (url,params)=>(dispatch, getState) => {
+    console.log(url, params)
     let formData = new FormData();  
     for(let k in params){  
         formData.append(k, params[k]);  
@@ -9,19 +10,19 @@ export const doUserLogin= (url,params)=>(dispatch, getState) => {
         dispatch=>
             fetch(url, {
                 method: 'POST',
-                cache: 'no-cache',
+                // cache: 'no-cache',
                 body: formData
             })
             .then((response)=> (
                 response.json()
             ))
             .then((responseText)=>{
-                // console.log(responseText)
-                dispatch(UserLogin(responseText.data, responseText.token, true))  
+                console.log(responseText)
+                dispatch(getDataAction(responseText.pageUtils.rows, responseText.token))  
             })
             .catch((error)=> {
                 console.log(error)
-                dispatch(UserLogin({}, "",false))  
+                // dispatch(UserLogin({}, "",false))  
             })
     )
 }

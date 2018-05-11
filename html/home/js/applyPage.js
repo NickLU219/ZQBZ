@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, Button } from 'antd-mobile'
+import { List, WhiteSpace, Button, SearchBar, Picker,Toast } from 'antd-mobile'
 
-import ImagePicker from 'react-native-image-picker'
+// import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
-import { SubmitApply } from '../action'
+import { SubmitApply, getDeptList, getUserList } from '../action'
 import API from '../../utils/apiMap';
 
 class ApplyPage extends React.Component{
@@ -12,10 +12,14 @@ class ApplyPage extends React.Component{
         super(props)
         const {item} = this.props.navigation.state.params
         const {token} = this.props
+        // console.log(item)
+        const time = new Date() 
+        // console.log(time,time.toLocaleTimeString())
+        this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         this.state = {
-            avatarSource: require("../img/upload.png"),
+            // avatarSource: require("../img/upload.png"),
             params: {
-                aiID: item.aiID,
+                aiId: item.aiId,
                 token: token,
                 agiUsePersonBefore: item.aiUsePersonId,
                 agiUseDeptBefore:item.aiUseDeptId,
@@ -24,104 +28,173 @@ class ApplyPage extends React.Component{
                 agiGetPersonName:"领用人姓名",
                 agiGetDeptName:"领用部门姓名",
                 agiGetRemark:"",
-                agiGetTime: (new Date()).toLocaleDateString(),
-            }
+                agiGetTime: this.dateString,
+            },
+            deptPickerValue: [],
+            deptVisible: false,
+            userPickerValue: [],
+            userVisible: false,
         };
         //图片选择器参数设置
-        this.options = {
-            title: '请选择图片来源',
-            cancelButtonTitle:'取消',
-            takePhotoButtonTitle:'拍照',
-            chooseFromLibraryButtonTitle:'相册图片',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
+        // this.options = {
+        //     title: '请选择图片来源',
+        //     cancelButtonTitle:'取消',
+        //     takePhotoButtonTitle:'拍照',
+        //     chooseFromLibraryButtonTitle:'相册图片',
+        //     storageOptions: {
+        //         skipBackup: true,
+        //         path: 'images'
+        //     }
+        // };
+        this.getDept()
+        // this.getPerson()
     }
       //选择照片按钮点击
-    choosePic() {
-        ImagePicker.showImagePicker(this.options, (response) => {
-            // console.log('Response = ', response);
+    // choosePic() {
+    //     ImagePicker.showImagePicker(this.options, (response) => {
+    //         // console.log('Response = ', response);
 
-            if (response.didCancel) {
-                console.log('用户取消了选择！');
-            }
-            else if (response.error) {
-                alert("ImagePicker发生错误：" + response.error);
-            }
-            else {
-                // let source = { uri: response.uri };
-                // You can also display the image using data:
-                let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                this.setState({
-                    avatarSource: source,
-                    agiGetRemark, source
-                });
-            }
-        })
-    }
+    //         if (response.didCancel) {
+    //             console.log('用户取消了选择！');
+    //         }
+    //         else if (response.error) {
+    //             alert("ImagePicker发生错误：" + response.error);
+    //         }
+    //         else {
+    //             // let source = { uri: response.uri };
+    //             // You can also display the image using data:
+    //             let source = { uri: 'data:image/jpeg;base64,' + response.data };
+    //             this.setState({
+    //                 avatarSource: source,
+    //                 agiGetRemark, source
+    //             });
+    //         }
+    //     })
+    // }
     getDept = () => {
-        console.log("获取领用部门")
-        this.props.navigation.navigate("Commonlist", {key: "dept"})
+        // console.log("获取领用部门")
+        const {getDeptList, userinfo,token} = this.props
+        getDeptList(API.dept_list, {odDwId:userinfo.odDwId, token})
     }
-    getPerson = () => {
-        console.log("获取领用人")
-        this.props.navigation.navigate("Commonlist", {key: "user"})
+    getPerson = (dept2User) => {
+        // console.log("获取领用人")
+        const {getUserList, userinfo,token} = this.props
+        getUserList(API.user_list, {odId:dept2User, token})
     }
-    submit() {
-        const {submitApply} = this.props
-        console.log(submitApply)
+    submit = () => {
+        const {submitApply,dept,user} = this.props
+        // console.log(submitApply)
         const url = API.doOperation.apply
         const {item} = this.props.navigation.state.params
         const params = this.state.params
+        
+        for (i in dept) {
+            if(this.state.deptPickerValue[2] == dept[i]["odId"]){
+                params.agiGetDeptName = dept[i]["odName"];
+            }
+            if (dept[i].children.length>0) {
+                let dept2 = dept[i].children
+                for (i in dept2) {
+                    if(this.state.deptPickerValue[2] == dept2[i]["odId"]){
+                        params.agiGetDeptName = dept2[i]["odName"];
+                    }
+                    if (dept2[i].children.length>0) {
+                        let dept3 = dept2[i].children
+                        for (i in dept3) {
+                            if(this.state.deptPickerValue[2] == dept3[i]["odId"]){
+                                params.agiGetDeptName = dept3[i]["odName"];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (k in user) {
+            if(params.agiGetPerson == user[k]["value"]){
+                params.agiGetPersonName = user[k]["label"];
+            } 
+        }
+        // console.log("submit", params)
         submitApply(url, params)
     }
+    // shouldComponentUpdate(next) {
+    //     if(next.msg === "操作成功"){
+    //         this.props.navigation.goBack()
+    //         return false
+    //     }
+    //     return true;
+
+    // }
 	render() {
+        // const {msg} = this.props
+        // if(msg === "操作成功") {
+        //     Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+        // }
+
+        let dept = this.props.dept
+        const user = this.props.user
+        // console.log("dept",dept,user)
         const {item} = this.props.navigation.state.params
-        const dept = item.aiUseDept
-        const user = item.aiUsePerson
-        
-        // console.log(dept, user)
+        const aiUseDept = item.aiUseDept
+        const aiUsePerson = item.aiUsePerson
+        let dept2User = ""
 		return (
 			<List renderHeader={()=>{}}>
                 <List.Item
-                    extra={ <Text>{dept}</Text> }>
+                    extra={ <Text>{aiUseDept}</Text> }>
                     原始部门
                 </List.Item>
                 <List.Item
-                    extra={ <Text>{user}</Text> }>
+                    extra={ <Text>{aiUsePerson}</Text> }>
                     原始使用人
                 </List.Item>
+                <Picker
+                    cols="3"
+                    visible={this.state.deptVisible}
+                    data={dept}
+                    value={this.state.deptPickerValue}
+                    onChange={v => {this.setState({ params: {...this.state.params, agiGetDept:v[1] },deptPickerValue:v});dept2User=v[1];}}
+                    onOk={(v) => {this.setState({ deptVisible: false });this.getPerson(dept2User)}}
+                    onDismiss={() => this.setState({ deptVisible: false })}
+                    format={(labels) => { return labels[labels.length-1]; }}
+                    >
+                    <List.Item 
+                        onClick={() => this.setState({ deptVisible: true })}>
+                        请选择领用部门
+                    </List.Item>
+                </Picker>
+                <Picker
+                    cols="1"
+                    visible={this.state.userVisible}
+                    data={user}
+                    value={this.state.userPickerValue}
+                    onChange={v => this.setState({ params: {...this.state.params, agiGetPerson:v[v.length-1] }, userPickerValue:v })}
+                    onOk={() => {this.setState({ userVisible: false })}}
+                    onDismiss={() => this.setState({ userVisible: false })}
+                    >
+                    <List.Item extra={
+                            <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
+                                <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
+                            </View> } 
+                        onClick={() => this.setState({ userVisible: true })}>
+                        请选择领用人
+                    </List.Item>
+                </Picker>
                 <List.Item
-                    arrow="horizontal"
-                    extra={
-                        <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}} onPress={this.getDept}> 请选择领用部门 </Text>
-                        </View>
-                    }>
-                    领用部门
-                </List.Item>
-                <List.Item
-                    arrow="horizontal"
-                    extra={
-                        <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}} onPress={this.getPerson}> 请选择领用人 </Text>
-                        </View>
-                    }>
-                    领用人
-                </List.Item>
-                <List.Item
-                    extra={<Text>{this.state.agiGetTime}</Text>}>
+                    extra={<Text>{this.dateString}</Text>}>
                     领用时间
                 </List.Item>
+                <List.Item
+                    extra={ <TextInput onChangeText={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})} placeholder="请填写领用描述" style={{textAlign: "right"}} /> }>
+                    领用描述
+                </List.Item>
                 {/* <Text>领用凭证</Text> */}
-                <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
+                {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
                     <Image source={this.state.avatarSource} width="100%" style={styles.image} />
-                </TouchableHighlight>
+                </TouchableHighlight> */}
                 <WhiteSpace/>
                 <WhiteSpace/>
-                <Button type="primary" onClick={this.submit()}>提交</Button>
+                <Button type="primary" onClick={this.submit}>提交</Button>
             </List>
 		)
 	}
@@ -137,9 +210,15 @@ const styles = StyleSheet.create({
 
 export default connect(
     state => ({
-        token: state.homeReducer.token
+        msg: state.gridReducer.msg,
+        token: state.homeReducer.token,
+        userinfo : state.homeReducer.userinfo,
+        dept: state.gridReducer.dept,
+        user: state.gridReducer.user,
     }),
     dispatch => ({
-		submitApply: (url,params) => {dispatch(SubmitApply(url,params))}
+        submitApply: (url,params) => {dispatch(SubmitApply(url,params))},
+        getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
+        getUserList: (url,params) => {dispatch(getUserList(url,params))}
     })
 )(ApplyPage)

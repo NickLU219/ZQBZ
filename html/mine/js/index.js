@@ -5,7 +5,9 @@ import { List } from 'antd-mobile'
 const Item = List.Item;
 const Brief = Item.Brief;
 
-export default class MinePage extends React.Component {
+import {connect} from 'react-redux'
+
+class MinePage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -30,13 +32,15 @@ export default class MinePage extends React.Component {
     }
 
     render() {
+        const {userinfo} = this.props
+        console.log(userinfo)
         return (
             <View>
                 <SafeAreaView/>
                 <View >
                     <Image source={require("../img/my_top_bg.png")} style={{height:120, width:"100%"}}/>
                     <Image source={require("../img/my_icon.png")} style={{height:110, marginTop:"-10%",alignSelf:"center"}} />
-                    <Text style={{alignSelf:"center", fontSize:20,marginTop:10, marginBottom:30}}>宿迁支队管理员(8532)</Text>
+                    <Text style={{alignSelf:"center", fontSize:20,marginTop:10, marginBottom:30}}>{userinfo.oeName}({userinfo.oeCode})</Text>
                 </View>
                 <List style={{width:"90%", alignSelf:"center"}}>
                     <Item
@@ -68,3 +72,9 @@ export default class MinePage extends React.Component {
         )
     }
 }
+
+export default connect(
+    (state)=> ({
+        userinfo: state.homeReducer.userinfo
+    })
+)(MinePage)
