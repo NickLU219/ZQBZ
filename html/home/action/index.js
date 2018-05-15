@@ -4,13 +4,17 @@ const getDeptAction = (dept, token) => ({type: "GET_DEPT_LIST",dept,token})
 
 const getUserAction = (user, token) => ({type: "GET_USER_LIST",user,token})
 
+const getPlaceAction = (place, token) => ({type: "GET_PLACE_LIST",place,token})
+
 const submitApplyAction = (msg, token) => ({type: "SUBMIT_APPLY",msg,token})
 
 const submitFixAction = (msg, token) => ({type: "SUBMIT_FIX",msg,token})
 
 const submitScrapAction = (msg, token) => ({type: "SUBMIT_SCRAP",msg,token})
 
-const SubmitMakeOverAction = (msg, token) => ({type: "SUBMIT_MAKE_OVER",msg,token})
+const submitMakeOverAction = (msg, token) => ({type: "SUBMIT_MAKE_OVER",msg,token})
+
+const submitChangeAction = (msg, token) => ({type: "SUBMIT_CHANGE",msg,token})
 
 export const getNewData= (url,params)=>(dispatch, getState) => {
     var formData = new FormData();  
@@ -99,6 +103,32 @@ export const getUserList = (url,params) => (dispatch, getState) => {
     )
 }
 
+export const getPlaceList = (url,params) => (dispatch, getState) => {
+    var formData = new FormData();  
+    for(let k in params){  
+        formData.append(k, params[k]);  
+    }  
+    console.log(formData)
+    dispatch( 
+        dispatch=>
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then((response)=> response.json())
+            .then((responseText)=>{
+                // console.log("getPlaceList",responseText)
+                let place = responseText.pageUtils.rows
+                for (i in place) {
+                    place[i].label = place[i]["apiName"]
+                    place[i].value = place[i]["apiId"]
+                }
+                dispatch(getPlaceAction(place, responseText.token))  
+            })
+            .catch((error)=> console.log(error,"failed"))
+    )
+}
+
 export const SubmitApply = (url,params) => (dispatch, getState) => {
     var formData = new FormData();  
     for(let k in params){  
@@ -177,7 +207,28 @@ export const SubmitMakeOver = (url,params) => (dispatch, getState) => {
             .then((response)=> response.json())
             .then((responseText)=>{
                 console.log("responseText",responseText)
-                dispatch(SubmitMakeOverAction(responseText.msg,responseText.token))  
+                dispatch(submitMakeOverAction(responseText.msg,responseText.token))  
+            })
+            .catch((error)=> console.log(error,"failed"))
+    )
+}
+
+export const SubmitChange = (url,params) => (dispatch, getState) => {
+    var formData = new FormData();  
+    for(let k in params){  
+        formData.append(k, params[k]);  
+    }  
+    console.log(formData)
+    dispatch( 
+        dispatch=>
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then((response)=> response.json())
+            .then((responseText)=>{
+                console.log("responseText",responseText)
+                dispatch(submitChangeAction(responseText.msg,responseText.token))  
             })
             .catch((error)=> console.log(error,"failed"))
     )

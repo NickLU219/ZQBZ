@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem, Button, Picker } from 'antd-mobile'
+import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
 
 import { connect } from 'react-redux'
 import { SubmitScrap ,getDeptList, getUserList } from '../action'
@@ -40,6 +40,10 @@ class ScrapPage extends React.Component {
         submitScrap(url, params)
     }
     render() {
+        const {msg} = this.props
+        if(msg === "操作成功") {
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+        }
         const {userinfo} = this.props
         return (
             <List>

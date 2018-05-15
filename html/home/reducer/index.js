@@ -1,4 +1,4 @@
-export default function gridReducer(state = {rows:[],token:"", dept:[], user:[], msg:""}, action) {
+export default function gridReducer(state = {rows:[],token:"", dept:[], user:[], place: [], msg:""}, action) {
     console.log(action.type, action)
     switch (action.type) {
       case "GET_NEW_DATA":
@@ -7,15 +7,19 @@ export default function gridReducer(state = {rows:[],token:"", dept:[], user:[],
         return{...state, dept:action.dept, token: action.token };break
       case "GET_USER_LIST":
         return{...state, user:action.user, token: action.token };break
+      case "GET_PLACE_LIST":
+        return{...state, place:action.place, token: action.token };break
       case "SUBMIT_APPLY":
-        return{...state, user:action.msg, token: action.token };break
+        return{...state, msg:action.msg, token: action.token };break
       case "SUBMIT_FIX":
-        return{...state, user:action.msg, token: action.token };break
+        return{...state, msg:action.msg, token: action.token };break
       case "SUBMIT_SCRAP":
-        return{...state, user:action.msg, token: action.token };break
+        return{...state, msg:action.msg, token: action.token };break
       case "SUBMIT_MAKE_OVER":
-        return{...state, user:action.msg, token: action.token };break
-       
+        return{...state, msg:action.msg, token: action.token };break
+      case "SUBMIT_CHANGE":
+        return{...state, msg:action.msg, token: action.token };break
+        
       default:
         return {...state}
     }

@@ -24,7 +24,8 @@ export default API = {
 
     dept_list: server.host+server.port+"/app/sqfire/user/dwdepttree",
     user_list: server.host+server.port+"/app/sqfire/user/deptuser",
-    
+    place_list: server.host+server.port+"/app/sqfire/placeInfo/list",
+
     homeGrid: {
         get: server.host+server.port+"/app/sqfire/aisearch/aiGetList",
         borrow:server.host+server.port+"/app/sqfire/aisearch/aiExchangeList",
@@ -40,6 +41,6 @@ export default API = {
         fix: server.host+server.port+"/app/sqfire/op/aiFixSave",
         scrap: server.host+server.port+"/app/sqfire/op/aiScrapSave",
         makeOver: server.host+server.port+"/app/sqfire/op/aiMakeOverSave",
-        change: server.host+server.port+"",
+        change: server.host+server.port+"/app/sqfire/op/aiChangeSave",
     }
 }

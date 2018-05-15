@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem, Button, Picker } from 'antd-mobile'
+import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
 
 import { connect } from 'react-redux'
 import {  SubmitFix,getDeptList, getUserList } from '../action'
@@ -53,12 +53,13 @@ class FixPage extends React.Component {
         submitFix(url, params)
     }
     render() {
+        const {msg} = this.props
+        // console.log(msg)
+        if(msg === "操作成功") {
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+        }
         let dept = this.props.dept
         const user = this.props.user
-        // console.log("dept",dept,user)
-        // const {item} = this.props.navigation.state.params
-        // const aiUseDept = item.aiUseDept
-        // const aiUsePerson = item.aiUsePerson
         let dept2User = ""
         return (
             <List renderHeader={()=>{}}>
@@ -86,7 +87,7 @@ class FixPage extends React.Component {
                     >
                     <List.Item 
                         onClick={() => this.setState({ deptVisible: true })}>
-                        请选择领用部门
+                        请选择维修部门
                     </List.Item>
                 </Picker>
                 <Picker
@@ -103,27 +104,9 @@ class FixPage extends React.Component {
                                 <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
                             </View> } 
                         onClick={() => this.setState({ userVisible: true })}>
-                        请选择领用人
+                        请选择维修人
                     </List.Item>
                 </Picker>
-                {/* <List.Item
-                    arrow="horizontal"
-                    extra={
-                        <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}} onPress={this.getDept}> 请选择维修部门 </Text>
-                        </View>
-                    }>
-                    维修部门
-                </List.Item>
-                <List.Item
-                    arrow="horizontal"
-                    extra={
-                        <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                            <Text style={{color:"#ccc"}} onPress={this.getPerson}> 请选择维修人 </Text>
-                        </View>
-                    }>
-                    维修人
-                </List.Item> */}
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>

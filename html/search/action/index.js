@@ -15,9 +15,6 @@ export const getNewData= (url,params)=>(dispatch, getState) => {
         dispatch=>
             fetch(url,{
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: formData
             })
             .then((response)=> response.json())
@@ -39,14 +36,10 @@ export const getInfo= (url,params)=>(dispatch, getState) => {
         dispatch=>
             fetch(url,{
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: formData
             })
             .then((response)=> response.json())
             .then((responseText)=>{
-                // console.log("responseText",responseText)
                 dispatch(getInfoAction(responseText.data, responseText.token))  
             })
             .catch((error)=> console.log(error,"failed"))
@@ -63,9 +56,6 @@ export const getInfoList= (url,params)=>(dispatch, getState) => {
         dispatch=>
             fetch(url,{
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: formData
             })
             .then((response)=> response.json())

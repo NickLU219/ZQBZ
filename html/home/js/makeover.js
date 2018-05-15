@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem,Button, Picker } from 'antd-mobile'
+import { List, WhiteSpace, InputItem,Button, Picker, Toast } from 'antd-mobile'
 
 import { connect } from 'react-redux'
 import { SubmitMakeOver ,getDeptList, getUserList } from '../action'
@@ -80,6 +80,10 @@ class MakeOverPage extends React.Component {
         SubmitMakeOver(url, params)
     }
     render() {
+        const {msg} = this.props
+        if(msg === "操作成功") {
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+        }
         let dept = this.props.dept
         const user = this.props.user
         // console.log("dept",dept,user)

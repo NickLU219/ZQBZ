@@ -57,16 +57,18 @@ class InfoPage  extends React.Component {
         renderGet = (tmpData) =>{
             let pages = []
             for(let i = 0; i < tmpData.length; i++){
-                pages.push(<View style={{height:8,backgroundColor:"#ddd"}}></View>)
+                pages.push(<View style={{height:4,backgroundColor:"#eee"}}></View>)
                 for (k in tmpData[0]){                
                     if (k.indexOf('Code')>-1 || k.indexOf('Id')>-1 || k == "aiGetType" || k=="aiPlace" || k =="aiUseState"
-                        || k == "aiFinKm" || k == "aiUseDw" || k == "deleted" || k =="aiRfidId"|| k =="aciChangePerson")
+                        || k == "aiFinKm" || k == "aiUseDw" || k == "deleted" || k =="aiRfidId"|| k =="aciChangePerson"
+                        || k == "amoiEmp" || k == "amoiDept" || k == "amoiDate" || k == "agiGetDept" || k == "agiUsePersonBefore"
+                        || k == "agiGetPerson" || k == "agiUseDeptBefore")
                         continue
                     else 
                         pages.push(
-                            <View style={{flex:1, flexDirection: "row"}}>
+                            <View style={{flex:1, flexDirection: "row", marginTop:3}}>
                             <Text style={{fontSize:15, marginLeft:10,fontWeight:"bold",flex:5}}>{zichanMap[k]} </Text>
-                            <Text style={{marginLeft: 100,fontWeight:"normal",flex:8}}>{tmpData[0][k] == null ? "无":tmpData[0][k]}</Text>
+                            <Text style={{marginLeft: 100,fontWeight:"normal",flex:7}}>{tmpData[0][k] == null ? "无":tmpData[0][k]}</Text>
                             </View>
                         )
                 }

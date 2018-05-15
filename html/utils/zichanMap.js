@@ -58,11 +58,11 @@ export const zichanMap = {
     "agiId": "领用记录ID", //领用记录ID
     "aiId": "资产ID", //资产ID
     "agiUsePersonBefore": "原使用人", //原使用人
-    "agiUsePersonBeforeName": "原使用人名称", //原使用人名称
+    "agiUsePersonBeforeName": "原使用人", //原使用人名称
     "agiUseDeptBefore": "原使用人部门", //原使用人部门
-    "agiUseDeptBeforeName": "员使用人部门名称", //员使用人部门名称
+    "agiUseDeptBeforeName": "原使用人部门", //员使用人部门名称
     "agiGetPerson": "领用人", //领用人
-    "agiGetPersonName": "领用人姓名", //领用人姓名 
+    "agiGetPersonName": "领用人", //领用人姓名 
     "agiGetDept": "1001A4100000000002DD",
     "agiGetDeptName": "领用人部门", //领用人部门
     "agiGetTime": "领用时间", 

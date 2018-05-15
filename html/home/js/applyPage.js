@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, Button, SearchBar, Picker,Toast } from 'antd-mobile'
+import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid } from 'antd-mobile'
 
-// import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
 import { SubmitApply, getDeptList, getUserList } from '../action'
 import API from '../../utils/apiMap';
@@ -17,7 +17,7 @@ class ApplyPage extends React.Component{
         // console.log(time,time.toLocaleTimeString())
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         this.state = {
-            // avatarSource: require("../img/upload.png"),
+            avatarSource: require("../img/upload.png"),
             params: {
                 aiId: item.aiId,
                 token: token,
@@ -36,41 +36,41 @@ class ApplyPage extends React.Component{
             userVisible: false,
         };
         //图片选择器参数设置
-        // this.options = {
-        //     title: '请选择图片来源',
-        //     cancelButtonTitle:'取消',
-        //     takePhotoButtonTitle:'拍照',
-        //     chooseFromLibraryButtonTitle:'相册图片',
-        //     storageOptions: {
-        //         skipBackup: true,
-        //         path: 'images'
-        //     }
-        // };
+        this.options = {
+            title: '请选择图片来源',
+            cancelButtonTitle:'取消',
+            takePhotoButtonTitle:'拍照',
+            chooseFromLibraryButtonTitle:'相册图片',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
         this.getDept()
         // this.getPerson()
     }
       //选择照片按钮点击
-    // choosePic() {
-    //     ImagePicker.showImagePicker(this.options, (response) => {
-    //         // console.log('Response = ', response);
+    choosePic() {
+        ImagePicker.showImagePicker(this.options, (response) => {
+            // console.log('Response = ', response);
 
-    //         if (response.didCancel) {
-    //             console.log('用户取消了选择！');
-    //         }
-    //         else if (response.error) {
-    //             alert("ImagePicker发生错误：" + response.error);
-    //         }
-    //         else {
-    //             // let source = { uri: response.uri };
-    //             // You can also display the image using data:
-    //             let source = { uri: 'data:image/jpeg;base64,' + response.data };
-    //             this.setState({
-    //                 avatarSource: source,
-    //                 agiGetRemark, source
-    //             });
-    //         }
-    //     })
-    // }
+            if (response.didCancel) {
+                console.log('用户取消了选择！');
+            }
+            else if (response.error) {
+                alert("ImagePicker发生错误：" + response.error);
+            }
+            else {
+                // let source = { uri: response.uri };
+                // You can also display the image using data:
+                let source = { uri: 'data:image/jpeg;base64,' + response.data };
+                this.setState({
+                    avatarSource: source,
+                    agiGetRemark, source
+                });
+            }
+        })
+    }
     getDept = () => {
         // console.log("获取领用部门")
         const {getDeptList, userinfo,token} = this.props
@@ -83,7 +83,6 @@ class ApplyPage extends React.Component{
     }
     submit = () => {
         const {submitApply,dept,user} = this.props
-        // console.log(submitApply)
         const url = API.doOperation.apply
         const {item} = this.props.navigation.state.params
         const params = this.state.params
@@ -114,22 +113,16 @@ class ApplyPage extends React.Component{
                 params.agiGetPersonName = user[k]["label"];
             } 
         }
-        // console.log("submit", params)
         submitApply(url, params)
     }
-    // shouldComponentUpdate(next) {
-    //     if(next.msg === "操作成功"){
-    //         this.props.navigation.goBack()
-    //         return false
-    //     }
-    //     return true;
 
-    // }
+
 	render() {
-        // const {msg} = this.props
-        // if(msg === "操作成功") {
-        //     Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
-        // }
+        const {msg} = this.props
+        // console.log(msg)
+        if(msg === "操作成功") {
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+        }
 
         let dept = this.props.dept
         const user = this.props.user
@@ -189,11 +182,12 @@ class ApplyPage extends React.Component{
                     领用描述
                 </List.Item>
                 {/* <Text>领用凭证</Text> */}
-                {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
-                    <Image source={this.state.avatarSource} width="100%" style={styles.image} />
-                </TouchableHighlight> */}
+                <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
+                    <Image source={this.state.avatarSource} style={styles.image} />
+                </TouchableHighlight>
                 <WhiteSpace/>
                 <WhiteSpace/>
+                {/* <Grid data={this.data} columnNum={3} itemStyle={{height:50 , width:50}} /> */}
                 <Button type="primary" onClick={this.submit}>提交</Button>
             </List>
 		)
@@ -202,8 +196,8 @@ class ApplyPage extends React.Component{
 //样式定义
 const styles = StyleSheet.create({
     image:{
-        height:200,
-        width:"100%",
+        height:50,
+        width:"30%",
         alignSelf:'center',
     },
 });
