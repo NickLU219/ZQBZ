@@ -56,23 +56,45 @@ class InfoPage  extends React.Component {
         
         renderGet = (tmpData) =>{
             let pages = []
-            for(let i = 0; i < tmpData.length; i++){
-                pages.push(<View style={{height:4,backgroundColor:"#eee"}}></View>)
-                for (k in tmpData[0]){                
-                    if (k.indexOf('Code')>-1 || k.indexOf('Id')>-1 || k == "aiGetType" || k=="aiPlace" || k =="aiUseState"
-                        || k == "aiFinKm" || k == "aiUseDw" || k == "deleted" || k =="aiRfidId"|| k =="aciChangePerson"
-                        || k == "amoiEmp" || k == "amoiDept" || k == "amoiDate" || k == "agiGetDept" || k == "agiUsePersonBefore"
-                        || k == "agiGetPerson" || k == "agiUseDeptBefore")
-                        continue
-                    else 
-                        pages.push(
-                            <View style={{flex:1, flexDirection: "row", marginTop:3}}>
-                            <Text style={{fontSize:15, marginLeft:10,fontWeight:"bold",flex:5}}>{zichanMap[k]} </Text>
-                            <Text style={{marginLeft: 100,fontWeight:"normal",flex:7}}>{tmpData[0][k] == null ? "无":tmpData[0][k]}</Text>
-                            </View>
-                        )
+            let index = 0
+            if (tmpData.length == 0){
+                pages.push(
+                    <View style={{width: "100%", height: 300, alignItems: "center", justifyContent: "center"}}>
+                        <Text>暂无数据</Text>
+                    </View>
+                )
+            }
+            else {
+                for(let i = 0; i < tmpData.length; i++){
+                    pages.push(<View style={{height:4,backgroundColor:"#ddd"}}></View>)
+                    for (k in tmpData[0]){                
+                        if (k.indexOf('Code')>-1 || k.indexOf('Id')>-1 || k == "aiGetType" || k=="aiPlace" || k =="aiUseState"
+                            || k == "aiFinKm" || k == "aiUseDw" || k == "deleted" || k =="aiRfidId"|| k =="aciChangePerson"
+                            || k == "amoiEmp" || k == "amoiDept" || k == "amoiDate" || k == "agiGetDept" || k == "agiUsePersonBefore"
+                            || k == "agiGetPerson" || k == "agiUseDeptBefore")
+                            continue
+                        else{
+                            if (index % 2 == 0)
+                                pages.push(
+                                    <View style={{flex:1, flexDirection: "row", backgroundColor: "#eee"}}> 
+                                        <Text style={{fontSize:15, marginLeft:10,fontWeight:"bold",flex:5, marginTop:3}}>{zichanMap[k]} </Text>
+                                        <Text style={{marginLeft: 100,fontWeight:"normal",flex:7, marginTop:3}}>{tmpData[0][k] == null ? "无":tmpData[0][k]}</Text>
+                                    </View>
+                                )
+                            else 
+                                pages.push(
+                                    <View style={{flex:1, flexDirection: "row", }}> 
+                                        <Text style={{fontSize:15, marginLeft:10,fontWeight:"bold",flex:5,marginTop:3}}>{zichanMap[k]} </Text>
+                                        <Text style={{marginLeft: 100,fontWeight:"normal",flex:7, marginTop:3}}>{tmpData[0][k] == null ? "无":tmpData[0][k]}</Text>
+                                    </View>
+                                )
+                        }
+                        index++
+                    }
+                    
                 }
             }
+            
             return pages
         }
         return <Tabs tabs={this.tabs}
@@ -81,9 +103,7 @@ class InfoPage  extends React.Component {
                 >
                     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "100%", backgroundColor: '#fff' }}>
                         <ScrollView style={{width: "100%", height: "100%"}}>
-                        {renderGet(tmpData).map(
-                            (d)=> d
-                        )}
+                        {renderGet(tmpData).map( (d)=> d )}
                         </ScrollView>
                     </View>
                     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "100%", backgroundColor: '#fff' }}>

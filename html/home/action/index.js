@@ -233,3 +233,5 @@ export const SubmitChange = (url,params) => (dispatch, getState) => {
             .catch((error)=> console.log(error,"failed"))
     )
 }
+
+export const ClearMsg = (msg) => ({type: "CLEAR_MSG",msg})

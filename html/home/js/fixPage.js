@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import {  SubmitFix,getDeptList, getUserList } from '../action'
+import {  SubmitFix,getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
 class FixPage extends React.Component {
@@ -52,6 +52,12 @@ class FixPage extends React.Component {
         // console.log("submit", params)
         submitFix(url, params)
     }
+
+    componentWillUnmount() {
+        const {ClearMsg} = this.props
+        ClearMsg("")
+        return true
+    }
     render() {
         const {msg} = this.props
         // console.log(msg)
@@ -64,11 +70,11 @@ class FixPage extends React.Component {
         return (
             <List renderHeader={()=>{}}>
                 <List.Item
-                    extra={ <TextInput onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} placeholder="请填写维修原因" style={{textAlign: "right"}} /> }>
+                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} placeholder="请填写维修原因" style={{textAlign: "right"}} /> }>
                     维修原因
                 </List.Item>
                 <List.Item
-                    extra={ <TextInput onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))} placeholder="请填写维修内容" style={{textAlign: "right"}} /> }>
+                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))} placeholder="请填写维修内容" style={{textAlign: "right"}} /> }>
                     维修内容
                 </List.Item>
                 <List.Item
@@ -103,7 +109,7 @@ class FixPage extends React.Component {
                             <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
                                 <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
                             </View> } 
-                        onClick={() => this.setState({ userVisible: true })}>
+                        onClick={() => {user.length>0?this.setState({ userVisible: true }):Toast.info("请先选择维修部门", 0.8)}}>
                         请选择维修人
                     </List.Item>
                 </Picker>
@@ -126,6 +132,7 @@ export default connect(
     dispatch => ({
         submitFix: (url,params) => {dispatch(SubmitFix(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
-        getUserList: (url,params) => {dispatch(getUserList(url,params))}
+        getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(FixPage)

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { List, WhiteSpace, InputItem, Picker, Button, Toast } from 'antd-mobile'
 import {connect} from 'react-redux'
-import { getDeptList, getUserList, getPlaceList, SubmitChange } from '../action'
+import { getDeptList, getUserList, getPlaceList, SubmitChange, ClearMsg } from '../action'
 import API from '../../utils/apiMap'
 
 class ChangePage extends React.Component {
@@ -71,6 +71,11 @@ class ChangePage extends React.Component {
         console.log(this.state.params)
         SubmitChange(API.doOperation.change,this.state.params)
     }
+    componentWillUnmount() {
+        const {ClearMsg} = this.props
+        ClearMsg("")
+        return true
+    }
     render() { 
         const {msg} = this.props
         if(msg === "操作成功") {
@@ -116,7 +121,7 @@ class ChangePage extends React.Component {
                     >
                     <List.Item 
                         extra={<Text>选择</Text>}
-                        onClick={() => this.setState({ aftervisible: true })}>
+                        onClick={() => {data.length>0?this.setState({ aftervisible: true }):Toast.info("请先选择变更内容", 0.8)}}>
                         变更后
                     </List.Item>
                 </Picker>
@@ -142,6 +147,7 @@ export default connect(
         getPlaceList: (url, params) => dispatch(getPlaceList(url, params)),
         getDeptList: (url, params) => dispatch(getDeptList(url, params)),
         getUserList: (url, params) => dispatch(getUserList(url, params)),
-        SubmitChange: (url, params) => dispatch(SubmitChange(url, params))
+        SubmitChange: (url, params) => dispatch(SubmitChange(url, params)),
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(ChangePage)

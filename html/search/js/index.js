@@ -50,6 +50,9 @@ class MyList extends React.Component {
 				// showCancelButton
 				/>
 				<FlatList
+				ListEmptyComponent={<View style={{width: "100%", height: 300, alignItems: "center", justifyContent: "center"}}>
+										<Text>暂无数据</Text>
+									</View>}
 				style={{backgroundColor: "#e0e0e0",height:"100%"}}
 				automaticallyAdjustContentInsets={false}
 				contentContainerStyle={{ paddingBottom: 100 }}
@@ -57,7 +60,7 @@ class MyList extends React.Component {
 				data={rows}
 				renderItem={
 					({item}) => (
-							<View style={{flex:1,flexDirection:"column", backgroundColor:"white"}}>
+							<View style={{flex:1,flexDirection:"column", backgroundColor:"white", borderRadius: 5, marginLeft:5, marginRight: 5}}>
 								<View style={{height:30,flex:1,flexDirection:"row",alignItems:"center"}}>
 									<Text style={{fontSize:15,flex:4,color:"black",marginLeft:20}}>资产编号：{item.aiCode}</Text>
 									{/* <Text style={{fontSize:15,flex:1,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply")}>申请领用</Text> */}
@@ -131,12 +134,3 @@ export default StackNavigator(
 	}
 );
 
-// const styles=StyleSheet.create({
-//     txt: {
-//         textAlign: 'center',
-//         textAlignVertical: 'center',
-//         color: 'white',
-//         fontSize: 30,
-//     }
-
-// })

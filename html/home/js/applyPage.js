@@ -4,7 +4,7 @@ import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid } from 'antd-mo
 
 import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
-import { SubmitApply, getDeptList, getUserList } from '../action'
+import { SubmitApply, getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
 class ApplyPage extends React.Component{
@@ -47,7 +47,6 @@ class ApplyPage extends React.Component{
             }
         };
         this.getDept()
-        // this.getPerson()
     }
       //选择照片按钮点击
     choosePic() {
@@ -66,7 +65,7 @@ class ApplyPage extends React.Component{
                 let source = { uri: 'data:image/jpeg;base64,' + response.data };
                 this.setState({
                     avatarSource: source,
-                    agiGetRemark, source
+                    // agiGetRemark, source
                 });
             }
         })
@@ -115,24 +114,26 @@ class ApplyPage extends React.Component{
         }
         submitApply(url, params)
     }
-
+    componentWillUnmount() {
+        const {ClearMsg} = this.props
+        ClearMsg("")
+        return true
+    }
 
 	render() {
         const {msg} = this.props
-        // console.log(msg)
         if(msg === "操作成功") {
             Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
         }
 
         let dept = this.props.dept
         const user = this.props.user
-        // console.log("dept",dept,user)
         const {item} = this.props.navigation.state.params
         const aiUseDept = item.aiUseDept
         const aiUsePerson = item.aiUsePerson
         let dept2User = ""
 		return (
-			<List renderHeader={()=>{}}>
+			<List>
                 <List.Item
                     extra={ <Text>{aiUseDept}</Text> }>
                     原始部门
@@ -169,7 +170,7 @@ class ApplyPage extends React.Component{
                             <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
                                 <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
                             </View> } 
-                        onClick={() => this.setState({ userVisible: true })}>
+                        onClick={() => {user.length>0?this.setState({ userVisible: true }) : Toast.info("请先选择部门", 0.8)}}>
                         请选择领用人
                     </List.Item>
                 </Picker>
@@ -178,7 +179,7 @@ class ApplyPage extends React.Component{
                     领用时间
                 </List.Item>
                 <List.Item
-                    extra={ <TextInput onChangeText={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})} placeholder="请填写领用描述" style={{textAlign: "right"}} /> }>
+                    extra={ <TextInput editable={true} multiline={true} maxLength={40} onChangeText={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})} placeholder="请填写领用描述" style={{textAlign: "right"}} /> }>
                     领用描述
                 </List.Item>
                 {/* <Text>领用凭证</Text> */}
@@ -213,6 +214,7 @@ export default connect(
     dispatch => ({
         submitApply: (url,params) => {dispatch(SubmitApply(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
-        getUserList: (url,params) => {dispatch(getUserList(url,params))}
+        getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(ApplyPage)

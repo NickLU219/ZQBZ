@@ -19,6 +19,8 @@ export default function gridReducer(state = {rows:[],token:"", dept:[], user:[],
         return{...state, msg:action.msg, token: action.token };break
       case "SUBMIT_CHANGE":
         return{...state, msg:action.msg, token: action.token };break
+      case "CLEAR_MSG":
+        return{...state, msg:action.msg };break
         
       default:
         return {...state}

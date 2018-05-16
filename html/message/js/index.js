@@ -58,6 +58,7 @@ class MessagePage extends React.Component {
 				/>
 				<FlatList
 				
+				ListEmptyComponent={<Text>抱歉 暂无数据</Text>}
 				// ListHeaderComponent={()=> (<View style={{height:0, backgroundColor:"#e0e0e0"}}></View>)}
 				// ListHeaderComponent= {()=> <Text style={[styles.txt,{backgroundColor:'black'}]}>这是头部</Text>}
 				style={{backgroundColor: "#e0e0e0",height:"100%"}}

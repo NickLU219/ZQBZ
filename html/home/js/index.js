@@ -34,8 +34,8 @@ class HomePage extends React.Component {
                     <WhiteSpace />
                     <HomeGrid props={{...this.props}} />
                     <WhiteSpace />
-                    <HomeList props={{...this.props}} />
-                    <WhiteSpace />
+                    {/* <HomeList props={{...this.props}} />
+                    <WhiteSpace /> */}
                     <WhiteSpace />
                     <HomeLineCharts/>
                     <WhiteSpace />
@@ -54,7 +54,7 @@ class HomeHeader extends React.Component {
         return (
             <View style={style.homeHeaderView}>
                 <Image source={require('../img/top_bg.png')} style={style.homeHeaderBg} />
-                <Text style={style.homeHeaderTitle}>首页</Text>
+                {/* <Text style={style.homeHeaderTitle}>首页</Text> */}
                 <Image source={require('../img/home_icon.png')} style={style.homeHeaderIcon} />
                 <Text style={style.homeHeaderAvater}>{userinfo.oeName}({userinfo.oeCode})</Text>
             </View>
@@ -114,26 +114,26 @@ class HomeGrid extends React.Component {
                 icon: <Image source={require('../img/list07.png')}/>,
                 text: '我的资产'
             },
-            {
-                icon: <Image source={require('../img/list08.png')}/>,
-                text: '资产借用'
-            },
-            {
-                icon: <Image source={require('../img/list06.png')}/>,
-                text: '资产自查'
-            },
-            {
-                icon: <Image source={require('../img/list07.png')}/>,
-                text: '我的资产'
-            },
-            {
-                icon: <Image source={require('../img/list06.png')}/>,
-                text: '资产自查'
-            },
-            {
-                icon: <Image source={require('../img/list07.png')}/>,
-                text: '我的资产'
-            }
+            // {
+            //     icon: <Image source={require('../img/list08.png')}/>,
+            //     text: '资产借用'
+            // },
+            // {
+            //     icon: <Image source={require('../img/list06.png')}/>,
+            //     text: '资产自查'
+            // },
+            // {
+            //     icon: <Image source={require('../img/list07.png')}/>,
+            //     text: '我的资产'
+            // },
+            // {
+            //     icon: <Image source={require('../img/list06.png')}/>,
+            //     text: '资产自查'
+            // },
+            // {
+            //     icon: <Image source={require('../img/list07.png')}/>,
+            //     text: '我的资产'
+            // }
         ]
         return (
             <View style={{backgroundColor:"white"}}>
@@ -442,12 +442,6 @@ export default StackNavigator(
                 headerTitle: "维修"
             }
         },
-        // Commonlist: {
-        //     screen: CommonList,
-        //     navigationOptions:{
-        //         headerTitle: "请选择"
-        //     }
-        // },
         Scrap: {
             screen: ScrapPage,
             navigationOptions:{
@@ -497,7 +491,7 @@ const style = StyleSheet.create({
         width: 150,
         fontSize: 18, 
         color: "black", 
-        top: 150, left: 40
+        top: 180, left: 40
     },
     homeHeaderBg: {
         width: '100%', 

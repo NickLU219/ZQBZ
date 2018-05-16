@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem,Button, Picker, Toast } from 'antd-mobile'
+import { List, WhiteSpace, InputItem,Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitMakeOver ,getDeptList, getUserList } from '../action'
+import { SubmitMakeOver ,getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
 class MakeOverPage extends React.Component {
@@ -79,6 +79,12 @@ class MakeOverPage extends React.Component {
         // console.log("submit", params)
         SubmitMakeOver(url, params)
     }
+    componentWillUnmount() {
+        const {ClearMsg} = this.props
+        ClearMsg("")
+        return true
+    }
+    
     render() {
         const {msg} = this.props
         if(msg === "操作成功") {
@@ -94,9 +100,12 @@ class MakeOverPage extends React.Component {
         return (
             <List >
                 <List.Item
-                    extra={ <TextInput onChangeText={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})} placeholder="请填写转让原因" style={{textAlign: "right"}} /> }>
-                    领用描述
+                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})} placeholder="请填写转让原因" style={{textAlign: "right"}} /> }>
+                    转让原因
                 </List.Item>
+                {/* <List.item
+                    extra={}>
+                </List.item> */}
                 <List.Item
                     extra={ <Text>{this.dateString}</Text> }>
                     转让时间
@@ -113,7 +122,7 @@ class MakeOverPage extends React.Component {
                     >
                     <List.Item 
                         onClick={() => this.setState({ deptVisible: true })}>
-                        请选择领用部门
+                        请选择转让部门
                     </List.Item>
                 </Picker>
                 <Picker
@@ -127,12 +136,18 @@ class MakeOverPage extends React.Component {
                     >
                     <List.Item extra={
                             <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                                <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
+                                <Text style={{color:"#ccc"}}> 请选择转让人 </Text>
                             </View> } 
-                        onClick={() => this.setState({ userVisible: true })}>
-                        请选择领用人
+                        onClick={() => {user.length>0?this.setState({ userVisible: true }):Toast.info("请先选择转让部门", 0.8)}}>
+                        请选择转让人
                     </List.Item>
                 </Picker>
+                {/* <TextareaItem 
+                style={{margin: 10}}
+                    rows={4} 
+                    placeholder="请输入转让原因" 
+                    autoHeight 
+                /> */}
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>
@@ -152,6 +167,7 @@ export default connect(
     dispatch => ({
         SubmitMakeOver: (url,params) => {dispatch(SubmitMakeOver(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
-        getUserList: (url,params) => {dispatch(getUserList(url,params))}
+        getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(MakeOverPage)

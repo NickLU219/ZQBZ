@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitScrap ,getDeptList, getUserList } from '../action'
+import { SubmitScrap ,getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
 class ScrapPage extends React.Component {
@@ -39,6 +39,11 @@ class ScrapPage extends React.Component {
         // console.log("submit", params)
         submitScrap(url, params)
     }
+    componentWillUnmount() {
+        const {ClearMsg} = this.props
+        ClearMsg("")
+        return true
+    }
     render() {
         const {msg} = this.props
         if(msg === "操作成功") {
@@ -48,7 +53,7 @@ class ScrapPage extends React.Component {
         return (
             <List>
                 <List.Item
-                    extra={ <TextInput onChangeText={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))} placeholder="请填写报废原因" style={{textAlign: "right"}} /> }>
+                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))} placeholder="请填写报废原因" style={{textAlign: "right"}} /> }>
                     报废原因
                 </List.Item>
                 <List.Item
@@ -79,6 +84,7 @@ export default connect(
     (dispatch)=> ({
         submitScrap: (url,params) => {dispatch(SubmitScrap(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
-        getUserList: (url,params) => {dispatch(getUserList(url,params))}
+        getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(ScrapPage)
