@@ -1,10 +1,10 @@
 import React from 'react';
 import { View , Text, ScrollView} from 'react-native';
-import { Tabs, List, PickerView } from 'antd-mobile'
+import { Tabs, List, PickerView, Button } from 'antd-mobile'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux'
 
-import { getInfo, getInfoList } from '../action' 
+import { getInfo, getInfoList, getPZ } from '../action' 
 
 import {zichanMap} from '../../utils/zichanMap'
 class InfoPage  extends React.Component {
@@ -29,17 +29,17 @@ class InfoPage  extends React.Component {
     getOtherInfo = (v)=> {
         const {key} = this.props.navigation.state.params
         const { getInfo, getInfoList, token }= this.props
-        console.log(v.title)
+        // console.log(v.title)
         switch (v.title) {
             case "基本信息": {this.otherThing.title="基本信息";getInfo(API.zichan_info.zichan_basic_info, {aiId: key, token});break;}
-            case "领用记录": {this.otherThing.title=title="领用记录";getInfoList(API.zichan_info.zichan_get_list, {aiId: key, token});break;}
-            case "维修信息": {this.otherThing.title=title="维修信息";getInfoList(API.zichan_info.zichan_fix_list, {aiId: key, token});break;}
-            case "变更信息": {this.otherThing.title=title="变更信息";getInfoList(API.zichan_info.zichan_change_list, {aiId: key, token});break;}
-            case "转让信息": {this.otherThing.title=title="转让信息";getInfoList(API.zichan_info.zichan_makeover_list, {aiId: key, token});break;}
+            case "领用记录": {this.otherThing.title="领用记录";getInfoList(API.zichan_info.zichan_get_list, {aiId: key, token});break;}
+            case "维修信息": {this.otherThing.title="维修信息";getInfoList(API.zichan_info.zichan_fix_list, {aiId: key, token});break;}
+            case "变更信息": {this.otherThing.title="变更信息";getInfoList(API.zichan_info.zichan_change_list, {aiId: key, token});break;}
+            case "转让信息": {this.otherThing.title="转让信息";getInfoList(API.zichan_info.zichan_makeover_list, {aiId: key, token});break;}
         }
     }
     shouldComponentUpdate(next) {
-        console.log("infopage update",next)
+        // console.log("infopage update",next)
         if (this.otherThing.title === "基本信息") {
             this.otherThing.updateInfo= next.data
             return true
@@ -48,6 +48,10 @@ class InfoPage  extends React.Component {
             return true
         }
         
+    }
+    showPhoto = (fileId) => {
+        const {getPZ} = this.props
+        getPZ(API.lesFile, {cmd:"getinfo", file_id:fileId})
     }
     render() {
         const tmpData = this.otherThing.updateInfo
@@ -67,7 +71,7 @@ class InfoPage  extends React.Component {
             else {
                 for(let i = 0; i < tmpData.length; i++){
                     pages.push(<View style={{height:4,backgroundColor:"#ddd"}}></View>)
-                    for (k in tmpData[0]){                
+                    for (k in tmpData[i]){                
                         if (k.indexOf('Code')>-1 || k.indexOf('Id')>-1 || k == "aiGetType" || k=="aiPlace" || k =="aiUseState"
                             || k == "aiFinKm" || k == "aiUseDw" || k == "deleted" || k =="aiRfidId"|| k =="aciChangePerson"
                             || k == "amoiEmp" || k == "amoiDept" || k == "amoiDate" || k == "agiGetDept" || k == "agiUsePersonBefore"
@@ -91,6 +95,11 @@ class InfoPage  extends React.Component {
                         }
                         index++
                     }
+                    if(tmpData[i]["fileId"] != null) pages.push(
+                                                        <View style={{alignItems: "center", justifyContent: "center"}}>
+                                                            <Button size="small" style={{marginLeft: 30, marginRight: 30}}  type="primary" onClick={()=>this.showPhoto(tmpData[i]["fileId"])}>查看凭证</Button>
+                                                        </View>
+                                                        )
                     
                 }
             }
@@ -140,12 +149,14 @@ class InfoPage  extends React.Component {
 
 export default connect(
     (state)=> ({
+        path : state.searchReducer.path,
         token: state.searchReducer.token,
         data: state.searchReducer.data,
         info: state.searchReducer.info
     }),
     (dispatch)=>({
         getInfo: (url,params) => {dispatch(getInfo(url,params))},
-        getInfoList: (url,params) => {dispatch(getInfoList(url,params))}
+        getInfoList: (url,params) => {dispatch(getInfoList(url,params))},
+        getPZ: (url, params) => dispatch(getPZ(url, params))
 	})
 )(InfoPage)

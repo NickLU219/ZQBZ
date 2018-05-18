@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Button, TouchableHighlight } from 'react-native';
-import { Icon, WhiteSpace, Card, SearchBar } from 'antd-mobile';
+import { View, Text, FlatList, Image, StyleSheet, Button, TouchableHighlight, ActivityIndicator } from 'react-native';
+import { Icon, WhiteSpace, Card, SearchBar, Toast } from 'antd-mobile';
 import { StackNavigator } from 'react-navigation';
 
 // import ApplyPage from './applyPage'
@@ -13,12 +13,19 @@ import { getNewData } from '../action'
 class MyList extends React.Component {
 	constructor(props) {
 		super(props)
-		const { getNewData,userinfo,token } = this.props
-		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId})
+		
+		this.state = {
+			aiName: '',
+			
+			refreshing: false,
+			page:1,
+			maxPage:0
+		};
 	}
-	state = {
-		aiName: '',
-	};
+	componentWillMount() {
+		const { getNewData,userinfo,token } = this.props
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, start: 1, end: 11})
+	}
 
 	onChange = (aiName) => {
 		this.setState({ aiName });
@@ -35,7 +42,28 @@ class MyList extends React.Component {
 	}
 	getNewDataWithSearch = (value) => {
 		const { getNewData,userinfo,token } = this.props
-		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName})
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName, start: 1, end: 11})
+	}
+	_onRefresh= () => {
+		this.setState({
+			refreshing: true,
+			page:1
+		})
+		const { getNewData,userinfo,token } = this.props
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName, start: 1, end: 11})
+	}
+	_onEndReached= () => {
+		const { getData,userinfo,token } = this.props
+		if (this.state.page<= this.state.maxPage)
+			getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName,start: 1+10*(this.state.page), end: 11+10*(this.state.page)})
+		else
+			Toast.info("没有更多了",0.5,()=>{},true)
+		this.setState({page:this.state.page+1})
+	}
+	componentWillReceiveProps(next) {
+		this.setState({refreshing:false, maxPage: parseInt(next.total/10)})
+		console.log(this.state.maxPage, next)
+		return true
 	}
 	render() {
 		const {rows} = this.props
@@ -50,7 +78,12 @@ class MyList extends React.Component {
 				// showCancelButton
 				/>
 				<FlatList
-				ListEmptyComponent={<View style={{width: "100%", height: 300, alignItems: "center", justifyContent: "center"}}>
+				// ListFooterComponent={this.renderFooter}
+				onRefresh={()=> {this._onRefresh()}}
+				refreshing={this.state.refreshing}
+				onEndReachedThreshold={0.1}
+				onEndReached={(v) => {this._onEndReached()}}
+				ListEmptyComponent={<View style={{width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
 										<Text>暂无数据</Text>
 									</View>}
 				style={{backgroundColor: "#e0e0e0",height:"100%"}}
@@ -99,6 +132,7 @@ class MyList extends React.Component {
 
 const MyListContaner = connect(
 	(state)=>({
+		total: state.searchReducer.total,
 		rows: state.searchReducer.rows,
         userinfo : state.homeReducer.userinfo,
         token: state.homeReducer.token
@@ -111,7 +145,7 @@ const MyListContaner = connect(
 
 export default StackNavigator(
 	{
-		Home: { 
+		Search: { 
 			screen: MyListContaner,
 			navigationOptions:{
 				headerTitle:'资产列表',
@@ -127,7 +161,7 @@ export default StackNavigator(
 		},
 	},
 	{
-		initialRouteName: 'Home',
+		initialRouteName: 'Search',
 		mode: "card",
 		headerMode: 'screen',
 		headerBackTitle: "返回"

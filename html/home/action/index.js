@@ -16,6 +16,10 @@ const submitMakeOverAction = (msg, token) => ({type: "SUBMIT_MAKE_OVER",msg,toke
 
 const submitChangeAction = (msg, token) => ({type: "SUBMIT_CHANGE",msg,token})
 
+const getBIDataAction = (option, token) => ({type: "GET_BI_DATA", option, token})
+
+export const ClearMsg = (msg) => ({type: "CLEAR_MSG",msg})
+
 export const getNewData= (url,params)=>(dispatch, getState) => {
     var formData = new FormData();  
     for(let k in params){  
@@ -234,4 +238,39 @@ export const SubmitChange = (url,params) => (dispatch, getState) => {
     )
 }
 
-export const ClearMsg = (msg) => ({type: "CLEAR_MSG",msg})
+export const getBIData = (url, params) => (dispatch, getState) => {
+    var formData = new FormData();  
+    for(let k in params){  
+        formData.append(k, params[k]);  
+    }  
+    console.log(formData)
+    dispatch( 
+        dispatch=>
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then((response)=> response.json())
+            .then((responseText)=>{
+                console.log("responseText",responseText)
+                const data = responseText.data
+                const AxAxis = [], Anum = [], Aprice = []
+                for (let i = 0; i < data[0].length;i++) {
+                    AxAxis.push(data[0][i]["dwName"])
+                    Anum.push(data[0][i]["total"])
+                    Aprice.push({value:data[0][i]["price"], name:data[0][i]["dwName"]})
+                }
+                const BxAixs = [], Bprice = []
+                for (let j = 0; j < data[1].length; j++) {
+                    BxAixs.push(data[1][j]["finKmName"])
+                    Bprice.push({value:data[1][j]["fee"], name:data[1][j]["finKmName"]})
+                }
+                const option = {
+                    AxAxis,Anum,Aprice,BxAixs,Bprice
+                }
+                
+                dispatch(getBIDataAction(option,responseText.token))  
+            })
+            .catch((error)=> console.log(error,"failed"))
+    )
+}

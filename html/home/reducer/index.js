@@ -1,4 +1,4 @@
-export default function gridReducer(state = {rows:[],token:"", dept:[], user:[], place: [], msg:""}, action) {
+export default function gridReducer(state = {rows:[],token:"", dept:[], user:[], place: [], msg:"", option: {}}, action) {
     console.log(action.type, action)
     switch (action.type) {
       case "GET_NEW_DATA":
@@ -21,6 +21,8 @@ export default function gridReducer(state = {rows:[],token:"", dept:[], user:[],
         return{...state, msg:action.msg, token: action.token };break
       case "CLEAR_MSG":
         return{...state, msg:action.msg };break
+      case "GET_BI_DATA":
+        return{...state, option:action.option, token: action.token };break
         
       default:
         return {...state}

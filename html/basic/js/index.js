@@ -1,14 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, Image, View } from 'react-native';
+import { StyleSheet, Text, Image, View, Platform } from 'react-native';
 
 import MainTabbar from '../js/MainTabbar'
+// import HomeView from '../../home/js/home'
 import LoginPage from '../js/login'
 import { connect } from 'react-redux'
+import {DeviceId, BundleId,DeviceName} from '../../utils/devInfo'
 
 class InitPage extends React.Component {
     constructor(props){
 		super(props);
 		const {login,userinfo,token} = this.props
+		// alert(DeviceName)
 		this.state = (
 			{
 				login: login,

@@ -36,10 +36,10 @@ class GridPage extends React.Component {
             case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});};break
         }
     }
-    shouldComponentUpdate() {
-        console.log("shouldComponentUpdate")
-        return true
-    }
+    // shouldComponentUpdate() {
+    //     console.log("shouldComponentUpdate")
+    //     return true
+    // }
     button = (key,item)=> {switch(key) {
         case "Get": return <Text style={{fontSize:17,flex:5,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply", {item})}>申请领用</Text>
         case "Repiar": return <Text style={{fontSize:17,flex:5,color:"blue"}} onPress={()=>this.props.navigation.navigate("Fix", {item})}>资产维修</Text>

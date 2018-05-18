@@ -5,10 +5,19 @@ const server={
     port: ":18644"
 }
 
-const aiUsePersonId= ["0001A410000000002JEQ" , "0001A410000000002JBP", "0001A410000000002JC3"]
+const lesServer= {
+    domain: "http://lessqzd.j2eeall.com"
+}
+
+// const aiUsePersonId= ["0001A410000000002JEQ" , "0001A410000000002JBP", "0001A410000000002JC3"]
 
 
 export default API = {
+    user_check: "http://221.226.106.186:8089/ws/yth/yhrz.xhtml",
+    lesFile: lesServer.domain+"/LesFileManageRpcService",
+    lesPZ: lesServer.domain,
+
+    home_bi: server.host+server.port+"/app/sqfire/aisearch/desktop",
     user_login: server.host+server.port+"/app/sqfire/user/info",
     zichan_list: server.host+server.port+"/app/sqfire/aisearch/list",
     zichan_info: {

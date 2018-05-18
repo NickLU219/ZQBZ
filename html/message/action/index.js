@@ -1,4 +1,4 @@
-const getDataAction = (rows, token) => ({type: "GET_DATA",rows,token})
+const getDataAction = (total, rows, token) => ({type: "GET_DATA",total,rows,token})
 
 export const getData= (url,params)=>(dispatch, getState) => {
     console.log(url, params)
@@ -17,8 +17,14 @@ export const getData= (url,params)=>(dispatch, getState) => {
                 response.json()
             ))
             .then((responseText)=>{
-                console.log(responseText)
-                dispatch(getDataAction(responseText.pageUtils.rows, responseText.token))  
+                console.log(getState().messageReducer.rows)
+                let rows = []
+                if (params["start"] == 1)
+                    rows = responseText.pageUtils.rows
+                else {
+                    rows = getState().messageReducer.rows.concat(responseText.pageUtils.rows)
+                }
+                dispatch(getDataAction(responseText.pageUtils.total, rows, responseText.token))  
             })
             .catch((error)=> {
                 console.log(error)

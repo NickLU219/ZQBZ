@@ -1,10 +1,11 @@
 import React from 'react';
 import { Card, WhiteSpace, Grid, List } from 'antd-mobile';
-import { Text, View, SafeAreaView, ScrollView, Image, StyleSheet, Platform } from 'react-native'
+import { Text, View, SafeAreaView, ScrollView, Image, StyleSheet, Platform, ActivityIndicator } from 'react-native'
 import { DeviceId } from '../../utils/devInfo'
-import Echarts from 'native-echarts'
+// import Echarts from 'native-echarts'
+import {Echarts, echarts} from 'react-native-secharts';
 import { StackNavigator } from 'react-navigation';
-
+// import MainTabbar from '../../basic/js/MainTabbar'
 import GridPage from './gridPage'
 import ApplyPage from './applyPage';
 import FixPage from './fixPage'
@@ -13,40 +14,81 @@ import ChangePage from './change'
 import MakeOverPage from './makeover'
 import InfoPage from '../../search/js/infoPage'
 import { connect } from 'react-redux'
+import {getBIData} from '../action'
 
 const Item = List.Item;
 const Brief = Item.Brief;
+import API from '../../utils/apiMap'
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props)
+        
+    }
+    componentWillMount(){
+        const {getBIData, userinfo, token} = this.props
+        // console.log(userinfo)
+        getBIData(API.home_bi, {token: token, aiUseDw: userinfo.odDwId})
     }
     render() {
-        return (
-            <View style={{ height: "100%" }}>
-                <ScrollView 
-                    style={{ backgroundColor:"#eee" }}
-                    scrollEnabled={true}
-                    showsVerticalScrollIndicator={false}
-                    endFillColor="black">
-                    <SafeAreaView/>                     
-                    <HomeHeaderComponent />
-                    <WhiteSpace />
-                    <HomeGrid props={{...this.props}} />
-                    <WhiteSpace />
-                    {/* <HomeList props={{...this.props}} />
-                    <WhiteSpace /> */}
-                    <WhiteSpace />
-                    <HomeLineCharts/>
-                    <WhiteSpace />
-                    <HomePieCharts1 />
-                    <WhiteSpace />
-                    <HomePieCharts2 />
-                </ScrollView>
-            </View>
-        );
+        // console.log(this.props.option)
+        if (this.props.option.hasOwnProperty("Anum"))
+            return (
+                <View style={{ height: "100%" }}>
+                    <ScrollView 
+                        style={{ backgroundColor:"#eee" }}
+                        scrollEnabled={true}
+                        showsVerticalScrollIndicator={false}
+                        endFillColor="black">
+                        <SafeAreaView/>                     
+                        <HomeHeaderComponent />
+                        <WhiteSpace />
+                        <HomeGrid props={{...this.props}} />
+                        <WhiteSpace />
+                        {/* <HomeList props={{...this.props}} />
+                        <WhiteSpace /> */}
+                        <WhiteSpace />
+                        <HomeLineCharts props={{...this.props}} />
+                        <WhiteSpace />
+                        <HomePieCharts1 props={{...this.props}} />
+                        <WhiteSpace />
+                        <HomePieCharts2 props={{...this.props}} />
+                    </ScrollView>
+                </View>
+            );
+        else 
+            return (
+                <View style={{ height: "100%" }}>
+                    <ScrollView 
+                        style={{ backgroundColor:"#eee" }}
+                        scrollEnabled={true}
+                        showsVerticalScrollIndicator={false}
+                        endFillColor="black">
+                        <SafeAreaView/>                     
+                        <HomeHeaderComponent />
+                        <WhiteSpace />
+                        <HomeGrid props={{...this.props}} />
+                        <WhiteSpace />
+                        {/* <HomeList props={{...this.props}} />
+                        <WhiteSpace /> */}
+                        <WhiteSpace />
+                        <ActivityIndicator />
+                    </ScrollView>
+                </View>
+            )
     }
 }
+
+const HomePageContainer = connect(
+    (state) => ({
+        userinfo: state.homeReducer.userinfo,
+        token : state.homeReducer.token,
+        option : state.gridReducer.option
+    }),
+    dispatch => ({
+        getBIData: (url, params) => dispatch(getBIData(url, params))
+    })
+)(HomePage)
 
 class HomeHeader extends React.Component {
     render() {
@@ -61,7 +103,7 @@ class HomeHeader extends React.Component {
         );
     }
 }
-let HomeHeaderComponent = connect(
+const HomeHeaderComponent = connect(
     state=>(
         {userinfo: state.homeReducer.userinfo}
     )
@@ -75,7 +117,6 @@ class HomeGrid extends React.Component {
     _gridJump = (el, index) => {
         switch (el.text) {
             case "资产领用": this.props.props.navigation.navigate("Get", {key: "Get"});break;            
-            // case "资产借用": this.props.props.navigation.navigate("Borrow", {key: "Borrow"});break;
             case "资产转让": this.props.props.navigation.navigate("Return", {key: "Return"});break;
             case "资产变更": this.props.props.navigation.navigate("Change", {key: "Change"});break;
             case "资产维修": this.props.props.navigation.navigate("Repiar", {key: "Repiar"});break;
@@ -114,26 +155,6 @@ class HomeGrid extends React.Component {
                 icon: <Image source={require('../img/list07.png')}/>,
                 text: '我的资产'
             },
-            // {
-            //     icon: <Image source={require('../img/list08.png')}/>,
-            //     text: '资产借用'
-            // },
-            // {
-            //     icon: <Image source={require('../img/list06.png')}/>,
-            //     text: '资产自查'
-            // },
-            // {
-            //     icon: <Image source={require('../img/list07.png')}/>,
-            //     text: '我的资产'
-            // },
-            // {
-            //     icon: <Image source={require('../img/list06.png')}/>,
-            //     text: '资产自查'
-            // },
-            // {
-            //     icon: <Image source={require('../img/list07.png')}/>,
-            //     text: '我的资产'
-            // }
         ]
         return (
             <View style={{backgroundColor:"white"}}>
@@ -168,16 +189,17 @@ class HomeList extends React.Component {
 
 class HomeLineCharts extends React.Component {
     render() {
+        const {AxAxis , Anum} = this.props.props.option
         const option = {
             title: {
-                text: '2008年宿迁消防支队资产总体情况',
+                text: '宿迁消防支队各单位资产数量',
                 textStyle: {
                     fontSize: 14
                 }
             },
             tooltip: {},
             legend: {
-                data:['资产增加值','资产减少值','资产总价值'],
+                data:['资产总数'],
                 right: 20,
                 width: 50,
                 orient: "vertical",
@@ -186,7 +208,7 @@ class HomeLineCharts extends React.Component {
             grid: {
                 left: 10,
                 right: 10,
-                bottom: 70,
+                bottom: 60,
                 containLabel: true
             },
             toolbox: {
@@ -195,37 +217,24 @@ class HomeLineCharts extends React.Component {
                 name: "单位",
                 axisLabel:{
                     interval: 0,
-                    rotate: 60
+                    rotate: 90
                 },
                 type: 'category',
-                boundaryGap: false,
-                data: ["支队机关","特宿区大队","宿豫区大队","湖滨新城大队","开发区大队","苏宿园区大队","洋河新城大队","沐阳县大队","泗洪县大队", "泗阳县大队","战勤保障大队","特勤中队"]
+                boundaryGap: true,
+                data: AxAxis
             },
             yAxis: {
                 type: 'value'
             },
             series: [
                 {
-                    name:'资产增加值',
+                    name:'资产总数',
                     type:'line',
                     stack: '总量',
-                    data:[200, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90],
+                    data:Anum,
                     smooth: true
                 },
-                {
-                    name:'资产减少值',
-                    type:'line',
-                    stack: '总量',
-                    data:[100, 182, 191, 154, 167, 135, 154, 154, 134, 187, 123, 178],
-                    smooth: true
-                },
-                {
-                    name:'资产总价值',
-                    type:'line',
-                    stack: '总量',
-                    data:[500, 600, 489, 589, 456, 645, 489, 589, 567, 389, 365, 589],
-                    smooth: true
-                },
+                
             ]
         };
         return (
@@ -236,16 +245,17 @@ class HomeLineCharts extends React.Component {
 
 class HomePieCharts1 extends React.Component {
     render() {
+        const {AxAxis , Aprice} = this.props.props.option
         const option = {
             title: {
-                text: '各单位资产数量(个)',
+                text: '各单位资产价值',
                 textStyle: {
                     fontSize: 14
                 }
             },
             tooltip: {},
             legend: {
-                data:["支队机关","特宿区大队","宿豫区大队","湖滨新城大队","开发区大队","苏宿园区大队","洋河新城大队","沐阳县大队","泗洪县大队", "泗阳县大队","战勤保障大队","特勤中队"],
+                data:AxAxis,
                 bottom: 10,
                 orient: "horizontal",
                 itemGap: 5,
@@ -281,20 +291,7 @@ class HomePieCharts1 extends React.Component {
                             show: true
                         }
                     },
-                    data:[
-                        {value:335, name:'支队机关'},
-                        {value:310, name:'特宿区大队'},
-                        {value:234, name:'宿豫区大队'},
-                        {value:235, name:'湖滨新城大队'},
-                        {value:335, name:'开发区大队'},
-                        {value:435, name:'苏宿园区大队'},
-                        {value:135, name:'洋河新城大队'},
-                        {value:235, name:'沐阳县大队'},
-                        {value:335, name:'泗洪县大队'},
-                        {value:235, name:'泗阳县大队'},
-                        {value:335, name:'战勤保障大队'},
-                        {value:548, name:'特勤中队'}
-                    ]
+                    data:Aprice
                 }
             ]
         };
@@ -306,16 +303,17 @@ class HomePieCharts1 extends React.Component {
 
 class HomePieCharts2 extends React.Component {
     render() {
+        const {BxAxis , Bprice} = this.props.props.option
         const option = {
             title: {
-                text: '各科目资产数量(个)',
+                text: '资产资金来源',
                 textStyle: {
                     fontSize: 14
                 }
             },
             tooltip: {},
             legend: {
-                data:["人员防护装备","灭火器材装备","抢险救援装备","消防通信指挥装备","消防车辆","办公用品","房屋建筑","土地"],
+                data:BxAxis,
                 bottom: 10,
                 orient: "horizontal",
                 itemGap: 5,
@@ -351,16 +349,7 @@ class HomePieCharts2 extends React.Component {
                             show: true
                         }
                     },
-                    data:[
-                        {value:335, name:'人员防护装备'},
-                        {value:310, name:'灭火器材装备'},
-                        {value:234, name:'抢险救援装备'},
-                        {value:235, name:'消防通信指挥装备'},
-                        {value:335, name:'消防车辆'},
-                        {value:435, name:'办公用品'},
-                        {value:135, name:'房屋建筑'},
-                        {value:235, name:'土地'}
-                    ]
+                    data:Bprice
                 }
             ]
         };
@@ -370,11 +359,41 @@ class HomePieCharts2 extends React.Component {
     }
 }
 
+const style = StyleSheet.create({
+    homeHeaderView: {
+        height: 250,
+    },
+    homeHeaderTitle:{
+        fontSize: 20, 
+        color: "white", 
+        paddingTop: 15, 
+        alignSelf: "center"
+    },
+    homeHeaderAvater: {
+        // alignSelf:'center',s
+        width: 150,
+        fontSize: 18, 
+        color: "black", 
+        top: 180, left: 40
+    },
+    homeHeaderBg: {
+        width: '100%', 
+        height: 250, 
+        position: 'absolute', 
+        top:0, bottom:0, left:0, right:0 ,
+    },
+    homeHeaderIcon: {
+        width: 100, 
+        height: 100, 
+        position: 'absolute', 
+        top: 70, left: 40
+    }
+})
 
 export default StackNavigator(
     {
-        Home: { 
-			screen: HomePage,
+        Main: { 
+			screen: HomePageContainer,
 			navigationOptions:{
                 header:null,
 				headerTitle:'首页',
@@ -385,12 +404,6 @@ export default StackNavigator(
             screen: GridPage,
 			navigationOptions:{
                 headerTitle:"资产领用"
-            }
-        },
-        Borrow: {
-            screen: GridPage,
-			navigationOptions:{
-                headerTitle:"资产借用"
             }
         },
         Return: {
@@ -429,7 +442,6 @@ export default StackNavigator(
                 headerTitle: "我的资产"
             }
         },
-
         Apply: {
             screen: ApplyPage,
             navigationOptions:{
@@ -469,40 +481,9 @@ export default StackNavigator(
 		},
     },
     {
-		initialRouteName: 'Home',
+		initialRouteName: 'Main',
 		mode: "card",
 		headerMode: 'screen',
 		headerBackTitle: "返回"
 	}
 )
-
-const style = StyleSheet.create({
-    homeHeaderView: {
-        height: 250,
-    },
-    homeHeaderTitle:{
-        fontSize: 20, 
-        color: "white", 
-        paddingTop: 15, 
-        alignSelf: "center"
-    },
-    homeHeaderAvater: {
-        // alignSelf:'center',s
-        width: 150,
-        fontSize: 18, 
-        color: "black", 
-        top: 180, left: 40
-    },
-    homeHeaderBg: {
-        width: '100%', 
-        height: 250, 
-        position: 'absolute', 
-        top:0, bottom:0, left:0, right:0 ,
-    },
-    homeHeaderIcon: {
-        width: 100, 
-        height: 100, 
-        position: 'absolute', 
-        top: 70, left: 40
-    }
-})

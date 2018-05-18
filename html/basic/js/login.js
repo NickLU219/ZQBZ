@@ -1,21 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View, SafeAreaView } from 'react-native';
-import { InputItem, Button, WhiteSpace } from 'antd-mobile'
+import { InputItem, Button, WhiteSpace, Toast } from 'antd-mobile'
 
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux';
-import { doUserLogin} from '../action'
+import { doUserLogin, doUserCheck,ClearMsg } from '../action'
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            userid: ""
+            username: "",
+            userpwd: ""
         }
     }
     render() {
 
-        const { doUserLogin } = this.props
+        
+        const { msg,doUserLogin,doUserCheck, ClearMsg } = this.props
+        if(msg !== "") Toast.info(msg,0.6,()=>{ClearMsg()},true)
         // console.log(doUserLogin)
         return (
             <View>
@@ -33,23 +36,44 @@ class LoginPage extends React.Component {
                     // value=""
                     onChange={(value) => {
                         this.setState({
-                            userid: value
+                            username: value
                         })
                     }}
-                    placeholder="请输入用户id"
+                    placeholder="请输入用户名"
                 >
                 用户名
                 </InputItem>
+                <InputItem
+                type="password"
+                style={{marginLeft: 40, marginRight: 40}}
+                    clear
+                    // onErrorPress={}
+                    // value=""
+                    onChange={(value) => {
+                        this.setState({
+                            userpwd: value
+                        })
+                    }}
+                    placeholder="请输入密码"
+                >
+                密码
+                </InputItem>
                 <WhiteSpace/>
-                <Button type="primary" style={{marginLeft: 40, marginRight: 40}} onClick={()=>doUserLogin(API.user_login, {oeCode:this.state.userid})}>登录</Button>
+                <Button type="primary" style={{marginLeft: 40, marginRight: 40}} onClick={()=>doUserCheck(API.user_check, {account:this.state.username, password:this.state.userpwd})}>登录</Button>
+                
+                {/* <Button type="primary" style={{marginLeft: 40, marginRight: 40}} onClick={()=>doUserLogin(API.user_login, {oeCode:this.state.userid})}>登录</Button> */}
             </View>
         )
     }
 }
 
 export default connect(
-    (state)=>({}),
+    (state)=>({
+        msg: state.homeReducer.msg
+    }),
     (dispatch)=>({
-        doUserLogin: (url,params) => {dispatch(doUserLogin(url,params))}}
-    )
+        doUserLogin: (url,params) => {dispatch(doUserLogin(url,params))},
+        doUserCheck: (url,params) => {dispatch(doUserCheck(url,params))},
+        ClearMsg: () => (dispatch(ClearMsg()))
+    })
 )(LoginPage)
