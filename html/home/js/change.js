@@ -100,7 +100,6 @@ class ChangePage extends React.Component {
                     format={(labels) => { return labels; }}
                     >
                     <List.Item 
-                        extra={<Text>选择</Text>}
                         onClick={() => this.setState({ visible: true })}>
                         请选择变更字段
                     </List.Item>

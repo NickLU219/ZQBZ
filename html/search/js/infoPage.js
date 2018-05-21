@@ -4,6 +4,7 @@ import { Tabs, List, PickerView, Button } from 'antd-mobile'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux'
 
+
 import { getInfo, getInfoList, getPZ } from '../action' 
 
 import {zichanMap} from '../../utils/zichanMap'
@@ -51,7 +52,9 @@ class InfoPage  extends React.Component {
     }
     showPhoto = (fileId) => {
         const {getPZ} = this.props
-        getPZ(API.lesFile, {cmd:"getinfo", file_id:fileId})
+        this.props.navigation.navigate("Browser", {file_id:fileId})
+        // getPZ(API.lesFile, {cmd:"getinfo", file_id:fileId})
+
     }
     render() {
         const tmpData = this.otherThing.updateInfo

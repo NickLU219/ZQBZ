@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
+import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
 import {  SubmitFix,getDeptList, getUserList, ClearMsg } from '../action'
@@ -22,11 +22,11 @@ class FixPage extends React.Component {
             params: {
                 token:this.props.token,
                 aiId: item.aiId,
-                afiFixReason: "维修原因",
-                afiFixContent: "维修内容",
+                afiFixReason: "",
+                afiFixContent: "",
                 afiFixTime : this.dateString,
-                afiFixDept: "报修部门",
-                afiFixPerson: "维修人"
+                afiFixDept: "",
+                afiFixPerson: ""
             }
         }
 
@@ -69,18 +69,6 @@ class FixPage extends React.Component {
         let dept2User = ""
         return (
             <List renderHeader={()=>{}}>
-                <List.Item
-                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} placeholder="请填写维修原因" style={{textAlign: "right"}} /> }>
-                    维修原因
-                </List.Item>
-                <List.Item
-                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))} placeholder="请填写维修内容" style={{textAlign: "right"}} /> }>
-                    维修内容
-                </List.Item>
-                <List.Item
-                    extra={ <Text>{this.dateString}</Text> }>
-                    维修时间
-                </List.Item>
                 <Picker
                     cols="3"
                     visible={this.state.deptVisible}
@@ -104,15 +92,27 @@ class FixPage extends React.Component {
                     onChange={v => this.setState({ params: {...this.state.params, afiFixPerson:v[v.length-1] }, userPickerValue:v })}
                     onOk={() => {this.setState({ userVisible: false })}}
                     onDismiss={() => this.setState({ userVisible: false })}
-                    >
+                    >   
                     <List.Item extra={
-                            <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
-                                <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
-                            </View> } 
-                        onClick={() => {user.length>0?this.setState({ userVisible: true }):Toast.info("请先选择维修部门", 0.8)}}>
-                        请选择维修人
-                    </List.Item>
+                        <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end", alignItems:"center", height:40}}>
+                            <Text style={{color:"#ccc"}}> 请选择领用人 </Text>
+                        </View> } 
+                    onClick={() => {user.length>0?this.setState({ userVisible: true }):Toast.info("请先选择维修部门", 0.8)}}>
+                    请选择维修人
+                </List.Item>             
                 </Picker>
+                <List.Item
+                    extra={ <Text>{this.dateString}</Text> }>
+                    维修时间
+                </List.Item>
+                <List.Item
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写维修内容" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))}/> }>
+                    维修内容
+                </List.Item>
+                <List.Item
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写维修原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} /> }>
+                    维修原因
+                </List.Item>                
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>

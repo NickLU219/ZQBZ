@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, InputItem, Button, Picker, Toast } from 'antd-mobile'
+import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
 import { SubmitScrap ,getDeptList, getUserList, ClearMsg } from '../action'
@@ -53,7 +53,7 @@ class ScrapPage extends React.Component {
         return (
             <List>
                 <List.Item
-                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))} placeholder="请填写报废原因" style={{textAlign: "right"}} /> }>
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写报废原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))}/> }>
                     报废原因
                 </List.Item>
                 <List.Item

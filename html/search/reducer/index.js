@@ -1,4 +1,4 @@
-export default function searchReducer(state = {rows:[],data:[],token:"",info:[],path:"",total:""}, action) {
+export default function searchReducer(state = {rows:[],data:[],token:"",info:[],path:"",total:"",path:""}, action) {
     // console.log(action.type, action.info)
     switch (action.type) {
       case "GET_NEW_DATA":

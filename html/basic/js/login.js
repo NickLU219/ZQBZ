@@ -30,6 +30,7 @@ class LoginPage extends React.Component {
                 </View>
                 <WhiteSpace/>
                 <InputItem
+                autoCapitalize="none"
                 style={{marginLeft: 40, marginRight: 40}}
                     clear
                     // onErrorPress={}

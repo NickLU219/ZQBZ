@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 
 // import ApplyPage from './applyPage'
 import InfoPage from './infoPage'
+import PhotoBrowserPage from './photoBrowser'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux'
 
@@ -159,6 +160,13 @@ export default StackNavigator(
 				headerBackTitle:null,
 			}
 		},
+		Browser: {
+			screen: PhotoBrowserPage,
+			navigationOptions:{
+				headerTitle:'浏览',
+				headerBackTitle:null,
+			}
+		}
 	},
 	{
 		initialRouteName: 'Search',

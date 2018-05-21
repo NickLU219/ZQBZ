@@ -1,21 +1,24 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { List, WhiteSpace, InputItem,Button, Picker, Toast, TextareaItem } from 'antd-mobile'
-
+import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
 import { SubmitMakeOver ,getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
-class MakeOverPage extends React.Component {
+import Basic from './basic'
+class MakeOverPage extends Basic {
     constructor(props) {
         super(props)
+        
         const {item } = this.props.navigation.state.params
-        console.log(item)
+        // console.log("props",props)
         const {userinfo, token} = this.props
         const time = new Date() 
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         
         this.state= {
+            ...this.state,
             deptPickerValue: [],
             deptVisible: false,
             userPickerValue: [],
@@ -23,16 +26,18 @@ class MakeOverPage extends React.Component {
             params: {
                 token: token,
                 aiId:item.aiId,
-                amoiEmp: "//转让操作员",
-                amoiEmpName: "操作人员姓名",
-                amoiDept:"c1bcf0eff9ed517ed3d5a71cf48fa064", //操作人员部门
-                amoiDeptName:" //操作人员部门名称",
-                amoiExplain:"//转让原因",
+                amoiEmp: "",
+                amoiEmpName: "",
+                amoiDept:"", //操作人员部门
+                amoiDeptName:" ",
+                amoiExplain:"",
                 amoiDate: this.dateString 
-            }
+            },
         }
+        // console.log("state", this.state)
         this.getDept()
     }
+
     getDept = () => {
         // console.log("获取领用部门")
         const {getDeptList, userinfo,token} = this.props
@@ -77,7 +82,8 @@ class MakeOverPage extends React.Component {
             } 
         }
         // console.log("submit", params)
-        SubmitMakeOver(url, params)
+        this.submitcheck(SubmitMakeOver(url, params))
+        
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -86,6 +92,7 @@ class MakeOverPage extends React.Component {
     }
     
     render() {
+        console.log("render")
         const {msg} = this.props
         if(msg === "操作成功") {
             Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
@@ -100,12 +107,9 @@ class MakeOverPage extends React.Component {
         return (
             <List >
                 <List.Item
-                    extra={ <TextInput editable={true} multiline={true} maxLength={40}  onChangeText={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})} placeholder="请填写转让原因" style={{textAlign: "right"}} /> }>
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写转让原因" autoHeight onChange={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})}/> }>
                     转让原因
                 </List.Item>
-                {/* <List.item
-                    extra={}>
-                </List.item> */}
                 <List.Item
                     extra={ <Text>{this.dateString}</Text> }>
                     转让时间
@@ -142,12 +146,12 @@ class MakeOverPage extends React.Component {
                         请选择转让人
                     </List.Item>
                 </Picker>
-                {/* <TextareaItem 
-                style={{margin: 10}}
-                    rows={4} 
-                    placeholder="请输入转让原因" 
-                    autoHeight 
-                /> */}
+                <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20, width:"30%"}}>
+                    <Image source={this.avatarSource} style={{height:50, width: "100%", alignSelf:'center',}} />
+                </TouchableHighlight>
+                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
+                    {this.showAllImages(this.state.images).map((d)=>(d))}
+                </View>
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>

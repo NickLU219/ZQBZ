@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid } from 'antd-mobile'
+import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid, TextareaItem } from 'antd-mobile'
 
-import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
 import { SubmitApply, getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
@@ -17,7 +16,7 @@ class ApplyPage extends React.Component{
         // console.log(time,time.toLocaleTimeString())
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         this.state = {
-            avatarSource: require("../img/upload.png"),
+            
             params: {
                 aiId: item.aiId,
                 token: token,
@@ -25,8 +24,8 @@ class ApplyPage extends React.Component{
                 agiUseDeptBefore:item.aiUseDeptId,
                 agiGetPerson:"",
                 agiGetDept:"",
-                agiGetPersonName:"领用人姓名",
-                agiGetDeptName:"领用部门姓名",
+                agiGetPersonName:"",
+                agiGetDeptName:"",
                 agiGetRemark:"",
                 agiGetTime: this.dateString,
             },
@@ -36,6 +35,7 @@ class ApplyPage extends React.Component{
             userVisible: false,
         };
         //图片选择器参数设置
+        this.avatarSource= require("../img/upload.png"),
         this.options = {
             title: '请选择图片来源',
             cancelButtonTitle:'取消',
@@ -179,12 +179,12 @@ class ApplyPage extends React.Component{
                     领用时间
                 </List.Item>
                 <List.Item
-                    extra={ <TextInput editable={true} multiline={true} maxLength={40} onChangeText={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})} placeholder="请填写领用描述" style={{textAlign: "right"}} /> }>
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写领用描述" autoHeight onChange={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})}/> }>
                     领用描述
                 </List.Item>
                 {/* <Text>领用凭证</Text> */}
                 <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
-                    <Image source={this.state.avatarSource} style={styles.image} />
+                    <Image source={this.avatarSource} style={{height:50, width:"30%", alignSelf:'center',}} />
                 </TouchableHighlight>
                 <WhiteSpace/>
                 <WhiteSpace/>
@@ -194,14 +194,6 @@ class ApplyPage extends React.Component{
 		)
 	}
 }
-//样式定义
-const styles = StyleSheet.create({
-    image:{
-        height:50,
-        width:"30%",
-        alignSelf:'center',
-    },
-});
 
 export default connect(
     state => ({
