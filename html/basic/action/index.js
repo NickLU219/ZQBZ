@@ -1,4 +1,7 @@
 import API from '../../utils/apiMap'
+
+import {Brand, DeviceId,DeviceName,SystemName,SystemVersion} from '../../utils/devInfo'
+
 const UserLogin = (userinfo,token,login) => ({type: "LOGIN",userinfo, token, login})
 
 const UserCheck = () => ({})
@@ -42,7 +45,7 @@ export const doUserCheck = (url,params)=>(dispatch, getState) => {
     console.log(formData)
     dispatch( 
         dispatch=>
-        dispatch(doUserLogin(API.user_login, {oeCode:8670}))
+        dispatch(doUserLogin(API.user_login, {oeCode:8670, Brand, DeviceId, DeviceName, SystemName, SystemVersion}))
             // fetch(url, {
             //     method: 'POST',
             //     cache: 'no-cache',

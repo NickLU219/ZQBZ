@@ -1,8 +1,6 @@
 const server={
-    // host: "http://192.168.0.104",
-    // port: ":8089"
-    host: "http://1808399kb5.iask.in",
-    port: ":18644"
+    host: "http://118.25.24.82",
+    port: ":8089"
 }
 
 const lesServer= {
@@ -17,6 +15,7 @@ export default API = {
     lesFile: lesServer.domain+"/LesFileManageRpcService",
     lesPZ: lesServer.domain,
 
+    upload_file: server.host+ server.port+"/app/sqfire/spFile/uploadFile",
     home_bi: server.host+server.port+"/app/sqfire/aisearch/desktop",
     user_login: server.host+server.port+"/app/sqfire/user/info",
     zichan_list: server.host+server.port+"/app/sqfire/aisearch/list",

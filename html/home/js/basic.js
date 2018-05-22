@@ -15,6 +15,7 @@ export default class BasicPage extends React.Component {
         this.avatarSource= require("../img/upload.png"),
         // this.images= []
         this.options = {
+            quality:0.1,
             title: '请选择图片来源',
             cancelButtonTitle:'取消',
             takePhotoButtonTitle:'拍照',
@@ -25,14 +26,15 @@ export default class BasicPage extends React.Component {
             }
         };
     }
-    submitcheck = (callback) => {
+    submitcheck = () => {
         for (i in this.state.params) {
             if (this.state.params[i] == "") {
                 Toast.info("请完善选项", 0.8)
-                return
+                return false
             }
         }
-        callback()
+        return true
+        
     }
 
     choosePic() {
@@ -58,7 +60,7 @@ export default class BasicPage extends React.Component {
                     // agiGetRemark, source
                 });
                 // this.images.push(source)
-                console.log(this.state.images)
+                console.log(this.state.images, this.state.imagenames)
             }
         })
     }
@@ -67,9 +69,12 @@ export default class BasicPage extends React.Component {
                 
         let img = []
         // img.push()
-        images.forEach((v,i,a) => (
-            img.push(<Image source={v} style={{height:100, width: 150, margin: 5}} />)        
-        ))
+        images.forEach((v,i,a) => {
+            // if(i == 0) img.push(<View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>)  
+            // else if(i == a.length-1) img.push(</View>) 
+            img.push(<Image source={v} style={{height:100, width: 100, margin: 5}} />)        
+        })
+        // img.unshift(<View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>)
         // img.push(</View>)
         return img
     }

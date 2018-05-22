@@ -5,7 +5,8 @@ import {connect} from 'react-redux'
 import { getDeptList, getUserList, getPlaceList, SubmitChange, ClearMsg } from '../action'
 import API from '../../utils/apiMap'
 
-class ChangePage extends React.Component {
+import Basic from './basic'
+class ChangePage extends Basic {
     constructor(props) {
         super(props)
         const {userinfo, token} = this.props
@@ -15,6 +16,7 @@ class ChangePage extends React.Component {
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         
         this.state= {
+            ...this.state,
             before: "",
             content: [
                 {value:"AI_USE_PERSON_ID", label:"人员"},
@@ -68,8 +70,9 @@ class ChangePage extends React.Component {
     }
     submit = () => {
         const {SubmitChange} = this.props
-        console.log(this.state.params)
-        SubmitChange(API.doOperation.change,this.state.params)
+        // console.log(this.state.params)
+        if(this.submitcheck()) 
+            SubmitChange(API.doOperation.change,this.state.params)
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -124,7 +127,11 @@ class ChangePage extends React.Component {
                         变更后
                     </List.Item>
                 </Picker>
-                
+                <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
+                <WhiteSpace />
+                <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
+                    {this.showAllImages(this.state.images).map((d)=>(d))}
+                </View> 
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>

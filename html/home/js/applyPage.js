@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import { SubmitApply, getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
-class ApplyPage extends React.Component{
+import Basic from './basic'
+class ApplyPage extends Basic {
     constructor(props) {
         super(props)
         const {item} = this.props.navigation.state.params
@@ -16,7 +17,7 @@ class ApplyPage extends React.Component{
         // console.log(time,time.toLocaleTimeString())
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         this.state = {
-            
+            ...this.state,
             params: {
                 aiId: item.aiId,
                 token: token,
@@ -34,41 +35,7 @@ class ApplyPage extends React.Component{
             userPickerValue: [],
             userVisible: false,
         };
-        //图片选择器参数设置
-        this.avatarSource= require("../img/upload.png"),
-        this.options = {
-            title: '请选择图片来源',
-            cancelButtonTitle:'取消',
-            takePhotoButtonTitle:'拍照',
-            chooseFromLibraryButtonTitle:'相册图片',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
         this.getDept()
-    }
-      //选择照片按钮点击
-    choosePic() {
-        ImagePicker.showImagePicker(this.options, (response) => {
-            // console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('用户取消了选择！');
-            }
-            else if (response.error) {
-                alert("ImagePicker发生错误：" + response.error);
-            }
-            else {
-                // let source = { uri: response.uri };
-                // You can also display the image using data:
-                let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                this.setState({
-                    avatarSource: source,
-                    // agiGetRemark, source
-                });
-            }
-        })
     }
     getDept = () => {
         // console.log("获取领用部门")
@@ -112,7 +79,8 @@ class ApplyPage extends React.Component{
                 params.agiGetPersonName = user[k]["label"];
             } 
         }
-        submitApply(url, params)
+        if(this.submitcheck)
+            submitApply(url, params)
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -183,9 +151,14 @@ class ApplyPage extends React.Component{
                     领用描述
                 </List.Item>
                 {/* <Text>领用凭证</Text> */}
-                <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
+                {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
                     <Image source={this.avatarSource} style={{height:50, width:"30%", alignSelf:'center',}} />
-                </TouchableHighlight>
+                </TouchableHighlight> */}
+                <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
+                <WhiteSpace />
+                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
+                    {this.showAllImages(this.state.images).map((d)=>(d))}
+                </View>
                 <WhiteSpace/>
                 <WhiteSpace/>
                 {/* <Grid data={this.data} columnNum={3} itemStyle={{height:50 , width:50}} /> */}

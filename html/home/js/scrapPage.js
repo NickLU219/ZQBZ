@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import { SubmitScrap ,getDeptList, getUserList, ClearMsg } from '../action'
 import API from '../../utils/apiMap';
 
-class ScrapPage extends React.Component {
+import Basic from './basic'
+class ScrapPage extends Basic {
 
     constructor(props) {
         super (props) 
@@ -17,6 +18,7 @@ class ScrapPage extends React.Component {
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         // console.log(userinfo)
         this.state = {
+            ...this.state,
             params: {
                 token:this.props.token,
                 aiId:item.aiId,
@@ -37,7 +39,8 @@ class ScrapPage extends React.Component {
         const params = this.state.params
         
         // console.log("submit", params)
-        submitScrap(url, params)
+        if(this.submitcheck()) 
+            submitScrap(url, params)
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -64,7 +67,11 @@ class ScrapPage extends React.Component {
                     extra={ <Text>{userinfo.odName}</Text> }>
                     报废人部门
                 </List.Item>
-                
+                <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
+                <WhiteSpace />
+                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
+                    {this.showAllImages(this.state.images).map((d)=>(d))}
+                </View>
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>

@@ -82,7 +82,7 @@ class MakeOverPage extends Basic {
             } 
         }
         // console.log("submit", params)
-        this.submitcheck(SubmitMakeOver(url, params))
+        if(this.submitcheck()) SubmitMakeOver(url, params)
         
     }
     componentWillUnmount() {
@@ -146,10 +146,12 @@ class MakeOverPage extends Basic {
                         请选择转让人
                     </List.Item>
                 </Picker>
-                <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20, width:"30%"}}>
+                {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20, width:"30%", height: 50}}>
                     <Image source={this.avatarSource} style={{height:50, width: "100%", alignSelf:'center',}} />
-                </TouchableHighlight>
-                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
+                </TouchableHighlight> */}
+                <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
+                <WhiteSpace />
+                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
                     {this.showAllImages(this.state.images).map((d)=>(d))}
                 </View>
                 <WhiteSpace/>

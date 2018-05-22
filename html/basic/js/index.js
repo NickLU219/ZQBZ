@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View, Platform } from 'react-native';
-
+import {Toast} from 'antd-mobile'
 import MainTabbar from '../js/MainTabbar'
 // import HomeView from '../../home/js/home'
 import LoginPage from '../js/login'
 import { connect } from 'react-redux'
-import {DeviceId, BundleId,DeviceName} from '../../utils/devInfo'
+// import {DeviceId, BundleId,DeviceName} from '../../utils/devInfo'
 
 class InitPage extends React.Component {
     constructor(props){
@@ -20,11 +20,11 @@ class InitPage extends React.Component {
 			}
 		)
 	}
-
 	shouldComponentUpdate(next) {
+
+		// Toast.hide()
 		return true
 	}
-
 	render() {
 		const {login,userinfo,token} = this.props
 		if (login){

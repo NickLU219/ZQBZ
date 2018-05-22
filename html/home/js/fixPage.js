@@ -3,18 +3,20 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import {  SubmitFix,getDeptList, getUserList, ClearMsg } from '../action'
+import {  SubmitFix,getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
 import API from '../../utils/apiMap';
 
-class FixPage extends React.Component {
+import Basic from './basic'
+class FixPage extends Basic{
     constructor(props) {
         super(props)
         const {item } = this.props.navigation.state.params
-        // console.log(item)
+        console.log(this.props.userinfo)
         const time = new Date() 
         this.dateString = time.toLocaleDateString().replace(/\//g,"-")+" " +time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()
         
         this.state= {
+            ...this.state,
             deptPickerValue: [],
             deptVisible: false,
             userPickerValue: [],
@@ -43,14 +45,17 @@ class FixPage extends React.Component {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {submitFix,dept,user} = this.props
+        const {submitFix,dept,user,uploadFile,token, userinfo} = this.props
         // console.log(submitApply)
         const url = API.doOperation.fix
         const {item} = this.props.navigation.state.params
         const params = this.state.params
         
         // console.log("submit", params)
-        submitFix(url, params)
+        // if(this.submitcheck()) 
+        //     submitFix(url, params)
+        //测试上传图片
+        uploadFile(API.upload_file, {spFile:this.state.images[0], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
     }
 
     componentWillUnmount() {
@@ -112,7 +117,12 @@ class FixPage extends React.Component {
                 <List.Item
                     extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写维修原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} /> }>
                     维修原因
-                </List.Item>                
+                </List.Item>  
+                <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
+                <WhiteSpace />
+                <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
+                    {this.showAllImages(this.state.images).map((d)=>(d))}
+                </View>              
                 <WhiteSpace/>
                 <WhiteSpace/>
                 <Button type="primary" onClick={this.submit}>提交</Button>
@@ -133,6 +143,7 @@ export default connect(
         submitFix: (url,params) => {dispatch(SubmitFix(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
         ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(FixPage)
