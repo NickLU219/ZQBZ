@@ -51,11 +51,13 @@ class FixPage extends Basic{
         const {item} = this.props.navigation.state.params
         const params = this.state.params
         
-        // console.log("submit", params)
-        // if(this.submitcheck()) 
-        //     submitFix(url, params)
         //测试上传图片
-        uploadFile(API.upload_file, {spFile:this.state.images[0], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
+        for(let i=0;i<this.state.images.length;i++)
+            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
+        
+        console.log("submit", params)
+        if(this.submitcheck()) 
+            submitFix(url, params)
     }
 
     componentWillUnmount() {

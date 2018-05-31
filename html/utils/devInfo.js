@@ -35,3 +35,5 @@ export const SystemName = DeviceInfo.getSystemName()
 export const SystemVersion = DeviceInfo.getSystemVersion()
 
 export const TimeZone = DeviceInfo.getTimezone()
+
+export const UniqueID = DeviceInfo.getUniqueID()

@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitScrap ,getDeptList, getUserList, ClearMsg } from '../action'
+import { SubmitScrap ,getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -32,11 +32,15 @@ class ScrapPage extends Basic {
 
     }
     submit = () => {
-        const {submitScrap} = this.props
+        const {submitScrap, uploadFile} = this.props
         // console.log(submitApply)
         const url = API.doOperation.scrap
         const {item} = this.props.navigation.state.params
         const params = this.state.params
+        
+        //测试上传图片
+        for(let i=0;i<this.state.images.length;i++)
+            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
         
         // console.log("submit", params)
         if(this.submitcheck()) 
@@ -69,7 +73,7 @@ class ScrapPage extends Basic {
                 </List.Item>
                 <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
                 <WhiteSpace />
-                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
+                <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
                     {this.showAllImages(this.state.images).map((d)=>(d))}
                 </View>
                 <WhiteSpace/>
@@ -92,6 +96,7 @@ export default connect(
         submitScrap: (url,params) => {dispatch(SubmitScrap(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
         ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(ScrapPage)

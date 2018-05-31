@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitApply, getDeptList, getUserList, ClearMsg } from '../action'
+import { SubmitApply, getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -48,7 +48,7 @@ class ApplyPage extends Basic {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {submitApply,dept,user} = this.props
+        const {submitApply,dept,user, uploadFile} = this.props
         const url = API.doOperation.apply
         const {item} = this.props.navigation.state.params
         const params = this.state.params
@@ -79,6 +79,11 @@ class ApplyPage extends Basic {
                 params.agiGetPersonName = user[k]["label"];
             } 
         }
+
+        //测试上传图片
+        for(let i=0;i<this.state.images.length;i++)
+            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
+        
         if(this.submitcheck)
             submitApply(url, params)
     }
@@ -156,7 +161,7 @@ class ApplyPage extends Basic {
                 </TouchableHighlight> */}
                 <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
                 <WhiteSpace />
-                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
+                <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
                     {this.showAllImages(this.state.images).map((d)=>(d))}
                 </View>
                 <WhiteSpace/>
@@ -180,6 +185,7 @@ export default connect(
         submitApply: (url,params) => {dispatch(SubmitApply(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
         ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(ApplyPage)

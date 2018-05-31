@@ -31,51 +31,88 @@ class HomePage extends React.Component {
         getBIData(API.home_bi, {token: token, aiUseDw: userinfo.odDwId})
     }
     render() {
-        // console.log(this.props.option)
-        if (this.props.option.hasOwnProperty("Anum"))
-            return (
-                <View style={{ height: "100%" }}>
-                    <ScrollView 
-                        style={{ backgroundColor:"#eee" }}
-                        scrollEnabled={true}
-                        showsVerticalScrollIndicator={false}
-                        endFillColor="black">
-                        <SafeAreaView/>                     
-                        <HomeHeaderComponent />
-                        <WhiteSpace />
-                        <HomeGrid props={{...this.props}} />
-                        <WhiteSpace />
-                        {/* <HomeList props={{...this.props}} />
-                        <WhiteSpace /> */}
-                        <WhiteSpace />
-                        <HomeLineCharts props={{...this.props}} />
-                        <WhiteSpace />
-                        <HomePieCharts1 props={{...this.props}} />
-                        <WhiteSpace />
-                        <HomePieCharts2 props={{...this.props}} />
-                    </ScrollView>
-                </View>
-            );
-        else 
-            return (
-                <View style={{ height: "100%" }}>
-                    <ScrollView 
-                        style={{ backgroundColor:"#eee" }}
-                        scrollEnabled={true}
-                        showsVerticalScrollIndicator={false}
-                        endFillColor="black">
-                        <SafeAreaView/>                     
-                        <HomeHeaderComponent />
-                        <WhiteSpace />
-                        <HomeGrid props={{...this.props}} />
-                        <WhiteSpace />
-                        {/* <HomeList props={{...this.props}} />
-                        <WhiteSpace /> */}
-                        <WhiteSpace />
-                        <ActivityIndicator />
-                    </ScrollView>
-                </View>
-            )
+        const lrId = this.props.userinfo.lrId
+        switch(lrId) {
+            case 'app_admin': {
+                return (
+                    <View style={{ height: "100%" }}>
+                        <ScrollView 
+                            style={{ backgroundColor:"#eee" }}
+                            scrollEnabled={true}
+                            showsVerticalScrollIndicator={false}
+                            endFillColor="black">
+                            <SafeAreaView/>                     
+                            <HomeHeaderComponent />
+                            <WhiteSpace />
+                            <HomeGrid props={{...this.props}} usertype={{lrId}} />
+                            <WhiteSpace />
+                            <WhiteSpace />
+                        </ScrollView>
+                    </View>
+                )
+            }
+            case 'app_leader':{
+                if (this.props.option.hasOwnProperty("Anum"))
+                    return (
+                        <View style={{ height: "100%" }}>
+                            <ScrollView 
+                                style={{ backgroundColor:"#eee" }}
+                                scrollEnabled={true}
+                                showsVerticalScrollIndicator={false}
+                                endFillColor="black">
+                                <SafeAreaView/>                     
+                                <HomeHeaderComponent />
+                                <WhiteSpace />
+                                <HomeGrid props={{...this.props}} usertype={{lrId}}/>
+                                <WhiteSpace />
+                                <WhiteSpace />
+                                <HomeLineCharts props={{...this.props}} />
+                                <WhiteSpace />
+                                <HomePieCharts1 props={{...this.props}} />
+                                <WhiteSpace />
+                                <HomePieCharts2 props={{...this.props}} />
+                            </ScrollView>
+                        </View>
+                    );
+                else {
+                    return (
+                        <View style={{ height: "100%" }}>
+                            <ScrollView 
+                                style={{ backgroundColor:"#eee" }}
+                                scrollEnabled={true}
+                                showsVerticalScrollIndicator={false}
+                                endFillColor="black">
+                                <SafeAreaView/>                     
+                                <HomeHeaderComponent />
+                                <WhiteSpace />
+                                <HomeGrid props={{...this.props}} usertype={{lrId}} />
+                                <WhiteSpace />
+                                <WhiteSpace />
+                                <ActivityIndicator />
+                            </ScrollView>
+                        </View>
+                    )
+                }
+            }
+            case 'app_emp': {
+                return (
+                    <View style={{ height: "100%" }}>
+                        <ScrollView 
+                            style={{ backgroundColor:"#eee" }}
+                            scrollEnabled={true}
+                            showsVerticalScrollIndicator={false}
+                            endFillColor="black">
+                            <SafeAreaView/>                     
+                            <HomeHeaderComponent />
+                            <WhiteSpace />
+                            <HomeGrid props={{...this.props}} usertype={{lrId}} />
+                            <WhiteSpace />
+                            <WhiteSpace />
+                        </ScrollView>
+                    </View>
+                )
+            }
+        }
     }
 }
 
@@ -112,7 +149,6 @@ const HomeHeaderComponent = connect(
 class HomeGrid extends React.Component {
     constructor(props) {
         super(props)
-        this.props = props
     }
     _gridJump = (el, index) => {
         switch (el.text) {
@@ -126,7 +162,7 @@ class HomeGrid extends React.Component {
         }
     }
     render() {
-        const data = [
+        let data = [
             {
                 icon: <Image source={require('../img/list01.png')}/>,
                 text: '资产领用'
@@ -156,6 +192,11 @@ class HomeGrid extends React.Component {
                 text: '我的资产'
             },
         ]
+        switch(this.props.usertype.lrId) {
+            case 'app_admin': data = data;break
+            case 'app_leader': data = data.filter((item)=> item.text == '资产自查'|item.text == '我的资产');break
+            case 'app_emp': data = data.filter((item)=> item.text == '资产自查'|item.text == '我的资产');break
+        }
         return (
             <View style={{backgroundColor:"white"}}>
                 <Grid data={data} isCarousel hasLine={false} onClick={ (el, index) => {this._gridJump(el,index)}}/>

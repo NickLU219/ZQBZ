@@ -279,10 +279,8 @@ export const getBIData = (url, params) => (dispatch, getState) => {
 
 export const uploadFile = (url,params) => (dispatch, getState) => {
     var formData = new FormData();  
-    let searchdata = ""
     for(let k in params){  
         formData.append(k, params[k]);
-        searchdata+=k+"="+  params[k]+"&"
     }  
     // searchdata.sub
     console.log(formData)
@@ -290,12 +288,6 @@ export const uploadFile = (url,params) => (dispatch, getState) => {
         dispatch=>
             fetch(url,{
                 method: 'POST',
-                headers: {
-                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
-                  },
-                // header: {
-                //     'Content-Type': 'multipart/form-data;charset=utf-8',
-                // },
                 body: formData
             })
             .then((response)=> response.json())

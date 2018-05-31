@@ -28,7 +28,6 @@ export const getData= (url,params)=>(dispatch, getState) => {
             })
             .catch((error)=> {
                 console.log(error)
-                // dispatch(UserLogin({}, "",false))  
             })
     )
 }

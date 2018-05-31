@@ -21,8 +21,7 @@ class InitPage extends React.Component {
 		)
 	}
 	shouldComponentUpdate(next) {
-
-		// Toast.hide()
+		Toast.hide()
 		return true
 	}
 	render() {

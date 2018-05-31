@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem,Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
-import { SubmitMakeOver ,getDeptList, getUserList, ClearMsg } from '../action'
+import { SubmitMakeOver ,getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -49,7 +49,7 @@ class MakeOverPage extends Basic {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {SubmitMakeOver,dept,user} = this.props
+        const {SubmitMakeOver,dept,user, uploadFile} = this.props
         // console.log(submitApply)
         const url = API.doOperation.makeOver
         const {item} = this.props.navigation.state.params
@@ -81,6 +81,10 @@ class MakeOverPage extends Basic {
                 params.amoiEmpName = user[k]["label"];
             } 
         }
+        //测试上传图片
+        for(let i=0;i<this.state.images.length;i++)
+            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
+        
         // console.log("submit", params)
         if(this.submitcheck()) SubmitMakeOver(url, params)
         
@@ -151,7 +155,7 @@ class MakeOverPage extends Basic {
                 </TouchableHighlight> */}
                 <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
                 <WhiteSpace />
-                <View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center", height:400}}>
+                <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>
                     {this.showAllImages(this.state.images).map((d)=>(d))}
                 </View>
                 <WhiteSpace/>
@@ -174,6 +178,7 @@ export default connect(
         SubmitMakeOver: (url,params) => {dispatch(SubmitMakeOver(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
+        uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
         ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
     })
 )(MakeOverPage)

@@ -38,31 +38,34 @@ export default class BasicPage extends React.Component {
     }
 
     choosePic() {
-        ImagePicker.showImagePicker(this.options, (response) => {
-            // console.log('Response = ', response);
+        if (this.state.images.length == 9)
+            Toast.info("图片不能超过9张")
+        else
+            ImagePicker.showImagePicker(this.options, (response) => {
+                // console.log('Response = ', response);
 
-            if (response.didCancel) {
-                console.log('用户取消了选择！');
-            }
-            else if (response.error) {
-                alert("ImagePicker发生错误：" + response.error);
-            }
-            else {
-                let source = { uri: response.uri };
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                const images = this.state.images
-                const imagenames = this.state.imagenames
-                images.push(source)
-                imagenames.push(response.fineName)
-                this.setState({
-                    images, imagenames
-                    // agiGetRemark, source
-                });
-                // this.images.push(source)
-                console.log(this.state.images, this.state.imagenames)
-            }
-        })
+                if (response.didCancel) {
+                    console.log('用户取消了选择！');
+                }
+                else if (response.error) {
+                    alert("ImagePicker发生错误：" + response.error);
+                }
+                else {
+                    let source = { uri: response.uri, type: 'multipart/form-data', name:response.fileName };
+                    // You can also display the image using data:
+                    // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+                    const images = this.state.images
+                    const imagenames = this.state.imagenames
+                    images.push(source)
+                    imagenames.push(response.fileName)
+                    this.setState({
+                        images, imagenames
+                        // agiGetRemark, source
+                    });
+                    // this.images.push(source)
+                    console.log(this.state.images, this.state.imagenames)
+                }
+            })
     }
 
     showAllImages = (images) => {

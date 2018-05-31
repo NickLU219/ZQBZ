@@ -15,15 +15,14 @@ class LoginPage extends React.Component {
         }
     }
     doLogIn= ()=>{
-        console.log("doLogIn")
-        const { doUserCheck } = this.props
-        // Toast.loading("",0,()=>{},true)
-        doUserCheck(API.user_check, {account:this.state.username, password:this.state.userpwd})
+        const { doUserLogin, ClearMsg } = this.props
+        Toast.loading("",0.6,()=>{ClearMsg()},true)
+        doUserLogin(API.user_login, {userId:this.state.username, pwd:this.state.userpwd})
     }
     render() {
-        const { msg,doUserLogin,doUserCheck, ClearMsg } = this.props
+        const { msg, ClearMsg } = this.props
+        console.log(msg)
         if(msg !== "") Toast.info(msg,0.6,()=>{ClearMsg()},true)
-        // console.log(doUserLogin)
         return (
             <View>
                 <SafeAreaView/>
@@ -66,7 +65,6 @@ class LoginPage extends React.Component {
                 <WhiteSpace/>
                 <Button type="primary" style={{marginLeft: 40, marginRight: 40}} onClick={this.doLogIn}>登录</Button>
                 
-                {/* <Button type="primary" style={{marginLeft: 40, marginRight: 40}} onClick={()=>doUserLogin(API.user_login, {oeCode:this.state.userid})}>登录</Button> */}
             </View>
         )
     }
