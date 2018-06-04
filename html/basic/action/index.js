@@ -10,12 +10,13 @@ export const ClearMsg = () => ({type: "CLEAR_MSG",msg:""})
 
 export const doUserLogin= (url,params)=>(dispatch, getState) => {
     let formData = new FormData();  
-    params["oeCode"] = 8532
+    params["oeCode"] = params["userId"]
     params = {...params, brand:Brand, deviceId:UniqueID, deviceName:DeviceId, systemName:SystemName, systemVersion:SystemVersion}
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
-    console.log(formData)
+    // console.log(formData)
+    
     dispatch( 
         dispatch=>
             fetch(url, {

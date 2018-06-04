@@ -20,6 +20,8 @@ const getBIDataAction = (option, token) => ({type: "GET_BI_DATA", option, token}
 
 const uploadFileAction = () => ({type: "UPLOAD_FILE"})
 
+const getActIdAction = (actId, aliId, token) => ({type: "GET_ACTID", actId, aliId, token})
+
 export const ClearMsg = (msg) => ({type: "CLEAR_MSG",msg})
 
 export const getNewData= (url,params)=>(dispatch, getState) => {
@@ -88,7 +90,7 @@ export const getUserList = (url,params) => (dispatch, getState) => {
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
-    // console.log(formData)
+    console.log(formData)
     dispatch( 
         dispatch=>
             fetch(url,{
@@ -278,11 +280,18 @@ export const getBIData = (url, params) => (dispatch, getState) => {
 }
 
 export const uploadFile = (url,params) => (dispatch, getState) => {
+    // console.log(params)
     var formData = new FormData();  
-    for(let k in params){  
-        formData.append(k, params[k]);
+    for(let k in params){ 
+        // console.log(k, params['spFile']) 
+        if(k == "spFile"){
+            for(let i in params["spFile"])
+                formData.append("spFile", params["spFile"][i])
+            continue;
+        }
+        else
+            formData.append(k, params[k]);
     }  
-    // searchdata.sub
     console.log(formData)
     dispatch( 
         dispatch=>
@@ -294,6 +303,28 @@ export const uploadFile = (url,params) => (dispatch, getState) => {
             .then((responseText)=>{
                 console.log("responseText",responseText)
                 // dispatch(submitChangeAction(responseText.msg,responseText.token))  
+            })
+            .catch((error)=> console.log(error,"failed"))
+    )
+}
+
+export const getActId = (url,params) => (dispatch, getState) => {
+    // console.log(params)
+    var formData = new FormData();  
+    for(let k in params){ 
+        formData.append(k, params[k]);
+    }  
+    console.log(formData)
+    dispatch( 
+        dispatch=>
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then((response)=> response.json())
+            .then((responseText)=>{
+                console.log("getActId",responseText)
+                dispatch(getActIdAction(responseText.data[0],responseText.data[1],responseText.token))  
             })
             .catch((error)=> console.log(error,"failed"))
     )

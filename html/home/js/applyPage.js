@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, Button, SearchBar, Picker,Toast, Grid, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitApply, getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
+import { SubmitApply, getDeptList, getUserList, ClearMsg, uploadFile, getActId } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -48,7 +48,7 @@ class ApplyPage extends Basic {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {submitApply,dept,user, uploadFile} = this.props
+        const {submitApply,dept,user, uploadFile, actId, aliId} = this.props
         const url = API.doOperation.apply
         const {item} = this.props.navigation.state.params
         const params = this.state.params
@@ -81,9 +81,9 @@ class ApplyPage extends Basic {
         }
 
         //测试上传图片
-        for(let i=0;i<this.state.images.length;i++)
-            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
-        
+        // for(let i=0;i<this.state.images.length;i++)
+        uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
+
         if(this.submitcheck)
             submitApply(url, params)
     }
@@ -180,12 +180,15 @@ export default connect(
         userinfo : state.homeReducer.userinfo,
         dept: state.gridReducer.dept,
         user: state.gridReducer.user,
+        actId: state.gridReducer.actId,
+        aliId: state.gridReducer.aliId,
     }),
     dispatch => ({
         submitApply: (url,params) => {dispatch(SubmitApply(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
         uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
-        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))},
+        getActId: (url,params) => {dispatch(getActId(url,params))},
     })
 )(ApplyPage)

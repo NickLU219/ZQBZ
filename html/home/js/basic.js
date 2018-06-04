@@ -69,16 +69,10 @@ export default class BasicPage extends React.Component {
     }
 
     showAllImages = (images) => {
-                
         let img = []
-        // img.push()
         images.forEach((v,i,a) => {
-            // if(i == 0) img.push(<View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>)  
-            // else if(i == a.length-1) img.push(</View>) 
             img.push(<Image source={v} style={{height:100, width: 100, margin: 5}} />)        
         })
-        // img.unshift(<View style={{display: "flex", flex: 1, flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>)
-        // img.push(</View>)
         return img
     }
 

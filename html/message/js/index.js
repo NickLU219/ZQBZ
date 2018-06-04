@@ -67,6 +67,9 @@ class MessagePage extends React.Component {
 		console.log(this.state.maxPage, next)
 		return true
 	}
+	componentWillUnmount() {
+		console.log("message componentWillUnmount" )
+	}
 	render() {  
 		const {rows} = this.props
 		// this.setState({refreshing:false})

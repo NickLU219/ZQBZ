@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, WhiteSpace, Grid, List } from 'antd-mobile';
 import { Text, View, SafeAreaView, ScrollView, Image, StyleSheet, Platform, ActivityIndicator } from 'react-native'
-import { DeviceId } from '../../utils/devInfo'
+import { DeviceId, AppVersion } from '../../utils/devInfo'
 // import Echarts from 'native-echarts'
 import {Echarts, echarts} from 'react-native-secharts';
 import { StackNavigator } from 'react-navigation';
@@ -24,6 +24,7 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props)
         
+		// alert(AppVersion)
     }
     componentWillMount(){
         const {getBIData, userinfo, token} = this.props

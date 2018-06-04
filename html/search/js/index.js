@@ -82,7 +82,7 @@ class MyList extends React.Component {
 				// ListFooterComponent={this.renderFooter}
 				onRefresh={()=> {this._onRefresh()}}
 				refreshing={this.state.refreshing}
-				onEndReachedThreshold={0.1}
+				onEndReachedThreshold={0.05}
 				onEndReached={(v) => {this._onEndReached()}}
 				ListEmptyComponent={<View style={{width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
 										<Text>暂无数据</Text>

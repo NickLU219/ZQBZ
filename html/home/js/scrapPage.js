@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitScrap ,getDeptList, getUserList, ClearMsg, uploadFile } from '../action'
+import { SubmitScrap ,getDeptList, getUserList, ClearMsg, uploadFile, getActId } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -32,15 +32,14 @@ class ScrapPage extends Basic {
 
     }
     submit = () => {
-        const {submitScrap, uploadFile} = this.props
+        const {submitScrap, uploadFile, actId, aliId} = this.props
         // console.log(submitApply)
         const url = API.doOperation.scrap
         const {item} = this.props.navigation.state.params
         const params = this.state.params
         
         //测试上传图片
-        for(let i=0;i<this.state.images.length;i++)
-            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
+        uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
         
         // console.log("submit", params)
         if(this.submitcheck()) 
@@ -91,12 +90,15 @@ export default connect(
         userinfo : state.homeReducer.userinfo,
         dept: state.gridReducer.dept,
         user: state.gridReducer.user,
+        actId: state.gridReducer.actId,
+        aliId: state.gridReducer.aliId,
     }),
     (dispatch)=> ({
         submitScrap: (url,params) => {dispatch(SubmitScrap(url,params))},
         getDeptList: (url,params) => {dispatch(getDeptList(url,params))},
         getUserList: (url,params) => {dispatch(getUserList(url,params))},
         uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
-        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))},
+        getActId: (url,params) => {dispatch(getActId(url,params))},
     })
 )(ScrapPage)

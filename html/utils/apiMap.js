@@ -15,6 +15,9 @@ export default API = {
     lesFile: lesServer.domain+"/LesFileManageRpcService",
     lesPZ: lesServer.domain,
 
+    checkUpdate: server.host+ server.port+"/app/sqfire/user/checkUpdate",
+
+    get_actId: server.host+ server.port+"/app/sqfire/op/getId",
     upload_file: server.host+ server.port+"/app/sqfire/spFile/uploadFile",
     home_bi: server.host+server.port+"/app/sqfire/aisearch/desktop",
     user_login: server.host+server.port+"/app/sqfire/user/info",

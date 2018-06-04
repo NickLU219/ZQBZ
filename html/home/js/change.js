@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { List, WhiteSpace, InputItem, Picker, Button, Toast } from 'antd-mobile'
 import {connect} from 'react-redux'
-import { getDeptList, getUserList, getPlaceList, SubmitChange, ClearMsg, uploadFile } from '../action'
+import { getDeptList, getUserList, getPlaceList, SubmitChange, ClearMsg, uploadFile, getActId } from '../action'
 import API from '../../utils/apiMap'
 
 import Basic from './basic'
@@ -69,12 +69,11 @@ class ChangePage extends Basic {
         }
     }
     submit = () => {
-        const {SubmitChange, uploadFile} = this.props
+        const {SubmitChange, uploadFile, actId, aliId} = this.props
         // console.log(this.state.params)
         //测试上传图片
-        for(let i=0;i<this.state.images.length;i++)
-            uploadFile(API.upload_file, {spFile:this.state.images[i], token, actId:"6ac693d26ac84afc963dfc136eebe6a8", asfUploadPerson:userinfo.oeId,aliId:item.aiId})
-        
+        uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
+
         if(this.submitcheck()) 
             SubmitChange(API.doOperation.change,this.state.params)
     }
@@ -151,7 +150,9 @@ export default connect(
         userinfo: state.homeReducer.userinfo,
         user: state.gridReducer.user,
         dept: state.gridReducer.dept,
-        place: state.gridReducer.place
+        place: state.gridReducer.place,
+        actId: state.gridReducer.actId,
+        aliId: state.gridReducer.aliId,
     }),
     (dispatch)=> ({
         getPlaceList: (url, params) => dispatch(getPlaceList(url, params)),
@@ -159,6 +160,7 @@ export default connect(
         getUserList: (url, params) => dispatch(getUserList(url, params)),
         SubmitChange: (url, params) => dispatch(SubmitChange(url, params)),
         uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
-        ClearMsg: (msg) => {dispatch(ClearMsg(msg))}
+        ClearMsg: (msg) => {dispatch(ClearMsg(msg))},
+        getActId: (url,params) => {dispatch(getActId(url,params))},
     })
 )(ChangePage)

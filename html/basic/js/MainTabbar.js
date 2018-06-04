@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import { TabBar } from 'antd-mobile';
-
 import HomePage from '../../home/js'
 import MinePage from '../../mine/js'
 import SearchPage from '../../search/js'

@@ -74,10 +74,12 @@ class GridPage extends React.Component {
                     // showCancelButton
 				/>
                 <FlatList
-                ListEmptyComponent={<View style={{width: "100%", height: 300, alignItems: "center", justifyContent: "center", backgroundColor:"#e0e0e0"}}>
+                ListEmptyComponent={<View style={{width: "100%", height: 300, alignItems: "center", justifyContent: "center", backgroundColor:"#f0f0f0"}}>
                                         <Text>暂无数据</Text>
                                     </View>}
-                style={{backgroundColor: "#e0e0e0"}}
+                style={{backgroundColor: "#f0f0f0"}}
+
+				contentContainerStyle={{ paddingBottom: 100 }}
                 ItemSeparatorComponent={()=>(<View style={{height:8, backgroundColor:"#e0e0e0"}}></View>)}
                 data={rows}
                 renderItem={
