@@ -76,27 +76,45 @@ export const getInfoList= (url,params)=>(dispatch, getState) => {
 
 export const getPZ= (url,params)=>(dispatch, getState) => {
     // console.log("url:",url,"params:", params)
-    var formData = new FormData();  
-    for(let k in params){  
-        formData.append(k, params[k]);  
-    }  
-    console.log(url, formData)
+    // var formData = new FormData();  
+    // for(let k in params){  
+    //     formData.append(k, params[k]);  
+    // }  
+    // console.log(url, formData)
+    const file_id = params['file_id']
+    let path = ""
+    let pro = []
     dispatch( 
-        dispatch=>
-            fetch(url,{
-                method: 'POST',
-                headers: {
-                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
-                  },
-                body: "cmd=getinfo&file_id="+params["file_id"]
+        dispatch=>{
+            const files = file_id.split(",")
+            files.reverse()
+            console.log("files", files)
+            pro = files.map(file_id => {
+                return fetch(url,{
+                    method: 'POST',
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" 
+                        },
+                    body: "cmd=getinfo&file_id="+file_id
+                })
+                .then((response)=> response.text())
+                .then((responseText)=>{
+                    console.log("getPZ",responseText)
+                    if(responseText.indexOf("?ERROR")==-1)
+                        path += "," + responseText.split(',')[0].replace(/"|\\|\[|!/g,"")
+                    // console.log(path)
+                    // dispatch(getPZAction(path))  
+                })
+                .catch((error)=> console.log(error,"failed"))
+            });
+            
+            Promise.all(pro)
+            .then(p => {
+                console.log("all",p, path)
+                dispatch(getPZAction(path.substring(1, path.length-1))) 
+
             })
-            .then((response)=> response.text())
-            .then((responseText)=>{
-                // console.log("getPZ",responseText)
-                const path = responseText.split(',')[0].replace(/"|\\|\[|!/g,"")
-                console.log(path)
-                dispatch(getPZAction(path))  
-            })
-            .catch((error)=> console.log(error,"failed"))
+            .catch(e=> console.log("fail",e))
+        }
     )
 }

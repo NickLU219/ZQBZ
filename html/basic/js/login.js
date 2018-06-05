@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View, SafeAreaView } from 'react-native';
 import { InputItem, Button, WhiteSpace, Toast } from 'antd-mobile'
-
+import {BundleId} from '../../utils/devInfo'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux';
-import { doUserLogin, doUserCheck,ClearMsg } from '../action'
+import { doUserLogin, doUserCheck,ClearMsg, doUpdateCheck } from '../action'
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -13,11 +13,16 @@ class LoginPage extends React.Component {
             username: "",
             userpwd: ""
         }
+        // alert(BundleId)
     }
     doLogIn= ()=>{
         const { doUserLogin, ClearMsg } = this.props
         Toast.loading("",0.6,()=>{ClearMsg()},true)
         doUserLogin(API.user_login, {userId:this.state.username, pwd:this.state.userpwd})
+    }
+    componentDidMount() {
+        const {doUpdateCheck} = this.props
+        doUpdateCheck(API.checkUpdate)
     }
     render() {
         const { msg, ClearMsg } = this.props
@@ -77,6 +82,8 @@ export default connect(
     (dispatch)=>({
         doUserLogin: (url,params) => {dispatch(doUserLogin(url,params))},
         doUserCheck: (url,params) => {dispatch(doUserCheck(url,params))},
+        doUpdateCheck: (url,params) => {dispatch(doUpdateCheck(url,params))},
         ClearMsg: () => (dispatch(ClearMsg()))
+        
     })
 )(LoginPage)

@@ -1387,6 +1387,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jushu.zqbz;
 				PRODUCT_NAME = zqbz_ne;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1411,6 +1412,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jushu.zqbz;
 				PRODUCT_NAME = zqbz_ne;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

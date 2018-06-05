@@ -1,4 +1,4 @@
-package com.zqbz_ne;
+package com.jushu.zqbz;
 
 import com.facebook.react.ReactActivity;
 

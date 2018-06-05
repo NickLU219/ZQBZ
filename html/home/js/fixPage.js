@@ -57,7 +57,7 @@ class FixPage extends Basic{
         
         // console.log("submit", params)
         if(this.submitcheck()) 
-            submitFix(url, params)
+            submitFix(url, {...params,aliId,actId})
     }
     componentWillMount() {
         const {getActId, token} = this.props

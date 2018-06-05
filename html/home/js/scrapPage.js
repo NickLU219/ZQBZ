@@ -43,7 +43,7 @@ class ScrapPage extends Basic {
         
         // console.log("submit", params)
         if(this.submitcheck()) 
-            submitScrap(url, params)
+            submitScrap(url, {...params,aliId,actId})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props

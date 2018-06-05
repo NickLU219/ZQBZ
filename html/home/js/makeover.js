@@ -85,7 +85,7 @@ class MakeOverPage extends Basic {
         uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
         
         // console.log("submit", params)
-        if(this.submitcheck()) SubmitMakeOver(url, params)
+        if(this.submitcheck()) SubmitMakeOver(url, {...params,aliId,actId})
         
     }
     componentWillUnmount() {

@@ -13,26 +13,27 @@ class PhotoBrowserPage extends React.Component{
         super(props)
         const {getPZ} = this.props
         const {file_id} = this.props.navigation.state.params
-        getPZ(API.lesFile, {cmd:"getinfo", file_id:file_id})
+        // if(file_id.indexOf(",")>0){
+        //     const files = file_id.split(",")
+        //     files.forEach(element => {
+        //         getPZ(API.lesFile, {cmd:"getinfo", file_id:file_id})
+        //     });
+        // }else{
+        //     getPZ(API.lesFile, {cmd:"getinfo", file_id:file_id})
+        // }
+        getPZ(API.lesFile, {file_id:file_id})
     }
 
     render() {
         const {path } = this.props
         if(path !== ""){
-            const media = [
-                {
-                  photo: API.lesPZ+ path,
-                  caption: '凭证',
-                }
-            ]
+            paths = path.split(",")
+            const media =paths.map( (item) =>
+                ({
+                  photo: API.lesPZ+ item,
+                })
+            )
             return (
-
-                
-                    // <Image
-                    // style={{width: "100%", height: 200}}
-                    //     source={{uri: API.lesPZ+ path}}
-                    //     />
-
                 <PhotoBrowser
                     mediaList={media}
                     initialIndex={0}

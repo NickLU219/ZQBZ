@@ -4,7 +4,7 @@ const server={
 }
 
 const lesServer= {
-    domain: "http://lessqzd.j2eeall.com"
+    domain: "http://101.132.150.0"
 }
 
 // const aiUsePersonId= ["0001A410000000002JEQ" , "0001A410000000002JBP", "0001A410000000002JC3"]

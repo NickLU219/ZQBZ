@@ -85,7 +85,7 @@ class ApplyPage extends Basic {
         uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
 
         if(this.submitcheck)
-            submitApply(url, params)
+            submitApply(url, {...params,aliId,actId})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props

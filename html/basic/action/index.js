@@ -1,10 +1,12 @@
 import API from '../../utils/apiMap'
 
-import {Brand, DeviceId,DeviceName,SystemName,SystemVersion, UniqueID} from '../../utils/devInfo'
+import {Brand, DeviceId,DeviceName,SystemName,SystemVersion, UniqueID, AppVersion, BundleId} from '../../utils/devInfo'
 
 const UserLogin = (userinfo,token,login) => ({type: "LOGIN",userinfo, token, login})
 
 const UserLoginFail = (msg) => ({type: "USER_LOGIN_FAIL", msg})
+
+const updateCheckAction = (path) => ({type: "UPDATE_CHECK",path})
 
 export const ClearMsg = () => ({type: "CLEAR_MSG",msg:""})
 
@@ -15,8 +17,6 @@ export const doUserLogin= (url,params)=>(dispatch, getState) => {
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
-    // console.log(formData)
-    
     dispatch( 
         dispatch=>
             fetch(url, {
@@ -38,6 +38,32 @@ export const doUserLogin= (url,params)=>(dispatch, getState) => {
             .catch((error,b)=> {
                 // console.log(error,b, "fail")
                 dispatch(UserLoginFail("登录失败"))  
+            })
+    )
+}
+
+export const doUpdateCheck = (url)=> (dispatch, getState) => {
+    let formData = new FormData(); 
+    const params = {appOs:SystemName, appId: BundleId, appVersion: AppVersion} 
+    for(let k in params){  
+        formData.append(k, params[k]);  
+    }  
+    console.log('checkupdate data',formData)
+    dispatch( 
+        dispatch=>
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then((response)=> (
+                response.json()
+            ))
+            .then((responseText)=>{
+                console.log("updatecheck",responseText)
+                
+            })
+            .catch((error)=> {
+                console.log(error, "fail")
             })
     )
 }

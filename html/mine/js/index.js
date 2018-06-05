@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, SafeAreaView, Text } from 'react-native';
 import { List } from 'antd-mobile'
-
+import {AppVersion} from '../../utils/devInfo'
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -44,28 +44,29 @@ class MinePage extends React.Component {
                 </View>
                 <List style={{width:"90%", alignSelf:"center"}}>
                     <Item
-                    arrow="horizontal"
+                    // arrow="horizontal"
                     thumb={<Image source={require('../img/data.png')} style={{marginLeft:10, marginRight:20}} />}
                     multipleLine
                     onClick={() => {}}
+                    extra={AppVersion}
                     >
-                        系统升级
+                        系统版本
                     </Item>
-                    <Item
+                    {/* <Item
                     arrow="horizontal"
                     thumb={<Image source={require('../img/set.png')} style={{marginLeft:10, marginRight:20}} />}
                     multipleLine
                     onClick={() => {}}
                     >
                         系统设置
-                    </Item>
+                    </Item> */}
                     <Item
                     arrow="empty"
                     thumb={<Image source={require('../img/heip.png')} style={{marginLeft:10, marginRight:20}} />}
                     multipleLine
                     onClick={() => {}}
                     >
-                        关于
+                        固定资产管理系统
                     </Item>
                 </List>
             </View>

@@ -75,7 +75,7 @@ class ChangePage extends Basic {
         uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
 
         if(this.submitcheck()) 
-            SubmitChange(API.doOperation.change,this.state.params)
+            SubmitChange(API.doOperation.change,{...this.state.params,aliId,actId})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props

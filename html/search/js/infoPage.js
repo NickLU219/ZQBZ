@@ -39,13 +39,35 @@ class InfoPage  extends React.Component {
             case "转让信息": {this.otherThing.title="转让信息";getInfoList(API.zichan_info.zichan_makeover_list, {aiId: key, token});break;}
         }
     }
+    dealArray(arr,index) {
+        const tmpArr = [...arr]
+        // let curindex = index
+            for(let i=index+1;i<arr.length;i++){
+                if (arr[0].aliId === arr[i].aliId)
+                    tmpArr.splice(i,i+1)
+                    tmpArr[0].fileId+=","+arr[i].aliId
+                    console.log(tmpArr)
+            }
+        index++
+        if(index < arr.length){
+            return this.dealArray(tmpArr, index)
+        }
+        else {
+            console.log("else return")
+            return tmpArr
+        }
+    }
     shouldComponentUpdate(next) {
         // console.log("infopage update",next)
         if (this.otherThing.title === "基本信息") {
             this.otherThing.updateInfo= next.data
             return true
         } else {
-            this.otherThing.updateInfo= next.info
+            //Todo: 整合id相同的记录 
+            console.log("next.info",next.info)
+            let data = next.info
+            // console.log("dealArr",this.dealArray(data,0))
+            this.otherThing.updateInfo= this.dealArray(data,0)
             return true
         }
         

@@ -48,6 +48,11 @@ class HomePage extends React.Component {
                             <HomeGrid props={{...this.props}} usertype={{lrId}} />
                             <WhiteSpace />
                             <WhiteSpace />
+                            <HomeLineCharts props={{...this.props}} />
+                            <WhiteSpace />
+                            <HomePieCharts1 props={{...this.props}} />
+                            <WhiteSpace />
+                            <HomePieCharts2 props={{...this.props}} />
                         </ScrollView>
                     </View>
                 )
