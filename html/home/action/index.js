@@ -29,6 +29,7 @@ export const getNewData= (url,params)=>(dispatch, getState) => {
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
+    console.log(formData)
     dispatch( 
         dispatch=>
             fetch(url,{
@@ -49,7 +50,7 @@ export const getDeptList = (url,params) => (dispatch, getState) => {
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
-    // console.log(formData)
+    console.log(formData)
     dispatch( 
         dispatch=>
             fetch(url,{
@@ -125,10 +126,10 @@ export const getPlaceList = (url,params) => (dispatch, getState) => {
             })
             .then((response)=> response.json())
             .then((responseText)=>{
-                // console.log("getPlaceList",responseText)
+                console.log("getPlaceList",responseText)
                 let place = responseText.pageUtils.rows
                 for (i in place) {
-                    place[i].label = place[i]["apiName"]
+                    place[i].label = place[i]["apiName"]+"("+place[i]["odName"]+")"
                     place[i].value = place[i]["apiId"]
                 }
                 dispatch(getPlaceAction(place, responseText.token))  

@@ -17,6 +17,7 @@ class ChangePage extends Basic {
         
         this.state= {
             ...this.state,
+            cols: "1",
             before: "",
             content: [
                 {value:"AI_USE_PERSON_ID", label:"人员"},
@@ -51,31 +52,38 @@ class ChangePage extends Basic {
         if (v[0] === "AI_USE_PERSON_ID") {
             this.setState({
                 before: item.aiUsePerson,
-                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiUsePerson, aciProperty: "人员"}
+                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiUsePerson, aciProperty: "人员"},
+                cols: "1"
             })
             getUserList(API.user_list, {odId:userinfo.odId, token})
         }else if (v[0] === "AI_USE_DEPT_ID") {
             this.setState({
                 before: item.aiUseDept,
-                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiUseDept, aciProperty: "部门"}
+                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiUseDept, aciProperty: "部门"},
+                cols: "3"
             })
-            getDeptList(API.dept_list, {odDwId:userinfo.odId, token})
+            getDeptList(API.dept_list, {odDwId:userinfo.odDwId, token})
         }else {
             this.setState({
                 before: item.aiPlaceName,
-                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiPlace, aciProperty: "位置"}
+                params: {...this.state.params,aciPropertyId: v[0],aciValueBefor: item.aiPlace, aciProperty: "位置"},
+                cols: "1"
             })
-            getPlaceList(API.place_list, {odId:userinfo.odId, token})
+            getPlaceList(API.place_list, {odDwId:userinfo.odDwId, token})
         }
     }
     submit = () => {
-        const {SubmitChange, uploadFile, actId, aliId} = this.props
+        const {SubmitChange, uploadFile, actId, aliId, userinfo, token} = this.props
         // console.log(this.state.params)
         //测试上传图片
         uploadFile(API.upload_file, {spFile:this.state.images, token, actId, asfUploadPerson:userinfo.oeId,aliId})
 
         if(this.submitcheck()) 
             SubmitChange(API.doOperation.change,{...this.state.params,aliId,actId})
+    }
+    componentWillMount() {
+        const {getActId, token} = this.props
+        getActId(API.get_actId,{token})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -115,7 +123,7 @@ class ChangePage extends Basic {
                     变更前
                 </List.Item>
                 <Picker
-                    cols="1"
+                    cols={this.state.cols}
                     visible={this.state.aftervisible}
                     data={data}
                     value={this.state.afterpickerValue}

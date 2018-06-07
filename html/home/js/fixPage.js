@@ -72,7 +72,7 @@ class FixPage extends Basic{
         const {msg} = this.props
         // console.log(msg)
         if(msg === "操作成功") {
-            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack({refresh: true})}, true)
         }
         let dept = this.props.dept
         const user = this.props.user
@@ -115,14 +115,16 @@ class FixPage extends Basic{
                     extra={ <Text>{this.dateString}</Text> }>
                     维修时间
                 </List.Item>
-                <List.Item
+                {/* <List.Item
                     extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写维修内容" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))}/> }>
                     维修内容
-                </List.Item>
-                <List.Item
+                </List.Item> */}
+                <TextareaItem rows={4} style={{fontSize: 15,margin: 5}} placeholder="请填写维修内容" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixContent:v}}))}/> 
+                {/* <List.Item
                     extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写维修原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} /> }>
                     维修原因
-                </List.Item>  
+                </List.Item>   */}
+                <TextareaItem rows={4} style={{fontSize: 15,margin: 5}} placeholder="请填写维修原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,afiFixReason:v}}))} /> 
                 <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
                 <WhiteSpace />
                 <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>

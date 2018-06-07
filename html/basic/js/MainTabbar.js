@@ -37,7 +37,7 @@ class MainTabbar extends React.Component {
 				</TabBar.Item>
 				<TabBar.Item
 					key="message"
-					title="资产动态"
+					title="周期查询"
 					icon={require("../img/zichan.png")}
 					selectedIcon={require("../img/zichan_select.png")}
 					selected={this.state.selectedTab === "message"}

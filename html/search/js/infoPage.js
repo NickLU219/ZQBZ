@@ -63,7 +63,6 @@ class InfoPage  extends React.Component {
             this.otherThing.updateInfo= next.data
             return true
         } else {
-            //Todo: 整合id相同的记录 
             console.log("next.info",next.info)
             let data = next.info
             // console.log("dealArr",this.dealArray(data,0))

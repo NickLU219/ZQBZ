@@ -11,6 +11,7 @@ const lesServer= {
 
 
 export default API = {
+    API_BASE: server.host+ server.port,
     user_check: "http://221.226.106.186:8089/ws/yth/yhrz.xhtml",
     lesFile: lesServer.domain+"/LesFileManageRpcService",
     lesPZ: lesServer.domain,

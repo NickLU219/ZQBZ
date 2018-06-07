@@ -1,24 +1,44 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View, SafeAreaView } from 'react-native';
-import { InputItem, Button, WhiteSpace, Toast } from 'antd-mobile'
-import {BundleId} from '../../utils/devInfo'
+import { InputItem, Button, WhiteSpace, Toast, Modal } from 'antd-mobile'
+import {BundleId, Model} from '../../utils/devInfo'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux';
-import { doUserLogin, doUserCheck,ClearMsg, doUpdateCheck } from '../action'
+import { doUserLogin, doUserCheck,ClearMsg, doUpdateCheck, systemUpdate } from '../action'
+
+
+const alert = Modal.alert
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             username: "",
-            userpwd: ""
+            userpwd: "",
+            path: ""
         }
         // alert(BundleId)
     }
+    alertUpdate= (path) => 
+        alert('更新', '有最新版本，请点击下载', [
+            { text: '下载', onPress: () => {
+                const {systemUpdate} = this.props
+                // Toast.loading("xiazaizhong")
+                systemUpdate(path)
+            } },
+          ])
+    
     doLogIn= ()=>{
         const { doUserLogin, ClearMsg } = this.props
         Toast.loading("",0.6,()=>{ClearMsg()},true)
         doUserLogin(API.user_login, {userId:this.state.username, pwd:this.state.userpwd})
+    }
+    componentWillUpdate(n){
+        if(n.path != ""){
+            // Toast.info("有可更新的版本",1, ()=> {},true)
+            this.alertUpdate(n.path)
+        }
+        return true
     }
     componentDidMount() {
         const {doUpdateCheck} = this.props
@@ -77,13 +97,15 @@ class LoginPage extends React.Component {
 
 export default connect(
     (state)=>({
-        msg: state.homeReducer.msg
+        msg: state.homeReducer.msg,
+        path: state.homeReducer.path
     }),
     (dispatch)=>({
         doUserLogin: (url,params) => {dispatch(doUserLogin(url,params))},
         doUserCheck: (url,params) => {dispatch(doUserCheck(url,params))},
         doUpdateCheck: (url,params) => {dispatch(doUpdateCheck(url,params))},
-        ClearMsg: () => (dispatch(ClearMsg()))
+        ClearMsg: () => (dispatch(ClearMsg())),
+        systemUpdate: (url) => (dispatch(systemUpdate(url)))
         
     })
 )(LoginPage)

@@ -17,7 +17,6 @@ class MyList extends React.Component {
 		
 		this.state = {
 			aiName: '',
-			
 			refreshing: false,
 			page:1,
 			maxPage:0
@@ -34,9 +33,11 @@ class MyList extends React.Component {
 
 	clear = () => {
 		this.setState({ aiName: '' });
+
+		const { getNewData,userinfo,token } = this.props
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, start: 1, end: 11})
 	}
 	shouldComponentUpdate(next) {
-		// console.log("shouldComponentUpdate",next)
 		if (next.rows === this.props.rows)
 			return false
 		else return true
@@ -72,6 +73,7 @@ class MyList extends React.Component {
 			<View>
 				<SearchBar
 				value={this.state.aiName}
+				// defaultValue={this.state.aiName}
 				placeholder="搜索"
 				onSubmit={this.getNewDataWithSearch}
 				onCancel={this.clear}
@@ -149,7 +151,7 @@ export default StackNavigator(
 		Search: { 
 			screen: MyListContaner,
 			navigationOptions:{
-				headerTitle:'资产列表',
+				headerTitle:'资产查询',
 				headerBackTitle:null,
 			} 
 		},

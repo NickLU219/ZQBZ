@@ -40,6 +40,10 @@ class MessagePage extends React.Component {
 
 	clear = () => {
 		this.setState({ aiName: '' });
+
+		const {getData, token,userinfo} = this.props
+		// console.log(props)
+		getData(API.zichan_life_list,{token, aliActDwId:userinfo.odDwId, start: 1, end: 11})
 	}
 	getNewDataWithSearch = (value) => {
 		const { getData,userinfo,token } = this.props
@@ -67,9 +71,7 @@ class MessagePage extends React.Component {
 		console.log(this.state.maxPage, next)
 		return true
 	}
-	componentWillUnmount() {
-		console.log("message componentWillUnmount" )
-	}
+	
 	render() {  
 		const {rows} = this.props
 		// this.setState({refreshing:false})
@@ -156,7 +158,7 @@ export default StackNavigator(
         Message: { 
 			screen: MessagePageContainer,
 			navigationOptions:{
-				headerTitle:'资产动态',
+				headerTitle:'周期查询',
 				headerBackTitle:null,
 			} 
 		},

@@ -32,7 +32,7 @@ class ScrapPage extends Basic {
 
     }
     submit = () => {
-        const {submitScrap, uploadFile, actId, aliId} = this.props
+        const {submitScrap, uploadFile, actId, aliId, token, userinfo} = this.props
         // console.log(submitApply)
         const url = API.doOperation.scrap
         const {item} = this.props.navigation.state.params
@@ -44,6 +44,10 @@ class ScrapPage extends Basic {
         // console.log("submit", params)
         if(this.submitcheck()) 
             submitScrap(url, {...params,aliId,actId})
+    }
+    componentWillMount() {
+        const {getActId, token} = this.props
+        getActId(API.get_actId,{token})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -58,10 +62,10 @@ class ScrapPage extends Basic {
         const {userinfo} = this.props
         return (
             <List>
-                <List.Item
+                {/* <List.Item
                     extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写报废原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))}/> }>
                     报废原因
-                </List.Item>
+                </List.Item> */}
                 <List.Item
                     extra={ <Text>{userinfo.oeName}</Text> }>
                     报废人
@@ -70,6 +74,7 @@ class ScrapPage extends Basic {
                     extra={ <Text>{userinfo.odName}</Text> }>
                     报废人部门
                 </List.Item>
+                <TextareaItem rows={4} style={{fontSize: 15, margin: 5}} placeholder="请填写报废原因" autoHeight onChange={(v)=>(this.setState({params: {...this.state.params,asiScrapExplan:v}}))}/>
                 <Button size="small" onClick={this.choosePic.bind(this)} style={{width: 100, marginLeft: 15, marginTop: 5}} >新增凭证</Button>
                 <WhiteSpace />
                 <View style={{display: "flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around",alignItems:"center"}}>

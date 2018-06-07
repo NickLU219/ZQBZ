@@ -48,7 +48,7 @@ class ApplyPage extends Basic {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {submitApply,dept,user, uploadFile, actId, aliId} = this.props
+        const {submitApply,dept,user, uploadFile, actId, aliId, userinfo, token} = this.props
         const url = API.doOperation.apply
         const {item} = this.props.navigation.state.params
         const params = this.state.params
@@ -86,6 +86,10 @@ class ApplyPage extends Basic {
 
         if(this.submitcheck)
             submitApply(url, {...params,aliId,actId})
+    }
+    componentWillMount() {
+        const {getActId, token} = this.props
+        getActId(API.get_actId,{token})
     }
     componentWillUnmount() {
         const {ClearMsg} = this.props
@@ -151,10 +155,11 @@ class ApplyPage extends Basic {
                     extra={<Text>{this.dateString}</Text>}>
                     领用时间
                 </List.Item>
-                <List.Item
+                {/* <List.Item
                     extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写领用描述" autoHeight onChange={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})}/> }>
                     领用描述
-                </List.Item>
+                </List.Item> */}
+                <TextareaItem rows={4} style={{fontSize: 15,margin: 5}} placeholder="请填写领用描述" autoHeight onChange={(v) => this.setState({params: {...this.state.params, agiGetRemark:v}})}/> 
                 {/* <Text>领用凭证</Text> */}
                 {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20}}>
                     <Image source={this.avatarSource} style={{height:50, width:"30%", alignSelf:'center',}} />

@@ -13,13 +13,7 @@ class GridPage extends React.Component {
         this.state = {
             value: ""
         }
-        onChange = (value) => {
-            this.setState({ value });
-        }
-    
-        clear = () => {
-            this.setState({ value: '' });
-        }
+        
         const { getNewData, navigation, userinfo, token } = this.props
         // console.log(userinfo)
         const {key} = navigation.state.params
@@ -27,7 +21,6 @@ class GridPage extends React.Component {
         // let med = ()=>{}
         switch (key){
             case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token});};break
-            // case "borrow": getNewData(API.homeGrid.borrow);break
             case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
             case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token});};break
@@ -36,10 +29,6 @@ class GridPage extends React.Component {
             case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});};break
         }
     }
-    // shouldComponentUpdate() {
-    //     console.log("shouldComponentUpdate")
-    //     return true
-    // }
     button = (key,item)=> {switch(key) {
         case "Get": return <Text style={{fontSize:17,flex:5,color:"blue"}} onPress={()=>this.props.navigation.navigate("Apply", {item})}>申请领用</Text>
         case "Repiar": return <Text style={{fontSize:17,flex:5,color:"blue"}} onPress={()=>this.props.navigation.navigate("Fix", {item})}>资产维修</Text>
@@ -58,6 +47,27 @@ class GridPage extends React.Component {
         else
             return <View></View> 
     }
+    onChange = (value) => {
+        this.setState({ value });
+    }
+
+    clear = () => {
+        this.setState({ value: '' });
+    }
+    submitWithKW=()=>{
+        const { getNewData, navigation, userinfo, token } = this.props
+        const {key} = navigation.state.params
+        switch (key){
+            case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
+            case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token});};break
+            case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token});};break
+            case "Deal": {getNewData(API.homeGrid.deal,{aiUseDw: userinfo.odDwId,token:token});};break
+            case "Search": {getNewData(API.homeGrid.search,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});}
+            case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});};break
+        }
+    }
+    
     render() {
         const {rows, navigation} = this.props;
         const {key} = navigation.state.params
@@ -68,7 +78,7 @@ class GridPage extends React.Component {
                 <SearchBar
                     value={this.state.value}
                     placeholder="搜索"
-                    onSubmit={(value) => {}}
+                    onSubmit={this.submitWithKW}
                     onCancel={this.clear}
                     onChange={this.onChange}
                     // showCancelButton

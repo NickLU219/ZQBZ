@@ -49,7 +49,7 @@ class MakeOverPage extends Basic {
         getUserList(API.user_list, {odId:dept2User, token})
     }
     submit = () => {
-        const {SubmitMakeOver,dept,user, uploadFile, actId, aliId} = this.props
+        const {SubmitMakeOver,dept,user, uploadFile, actId, aliId,token, userinfo} = this.props
         // console.log(submitApply)
         const url = API.doOperation.makeOver
         const {item} = this.props.navigation.state.params
@@ -88,6 +88,10 @@ class MakeOverPage extends Basic {
         if(this.submitcheck()) SubmitMakeOver(url, {...params,aliId,actId})
         
     }
+    componentWillMount() {
+        const {getActId, token} = this.props
+        getActId(API.get_actId,{token})
+    }
     componentWillUnmount() {
         const {ClearMsg} = this.props
         ClearMsg("")
@@ -109,14 +113,6 @@ class MakeOverPage extends Basic {
         let dept2User = ""
         return (
             <List >
-                <List.Item
-                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写转让原因" autoHeight onChange={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})}/> }>
-                    转让原因
-                </List.Item>
-                <List.Item
-                    extra={ <Text>{this.dateString}</Text> }>
-                    转让时间
-                </List.Item>
                 <Picker
                     cols="3"
                     visible={this.state.deptVisible}
@@ -149,6 +145,15 @@ class MakeOverPage extends Basic {
                         请选择转让人
                     </List.Item>
                 </Picker>
+                {/* <List.Item
+                    extra={ <TextareaItem rows={4} style={{fontSize: 15,width: 200,textAlign: "right"}} placeholder="请填写转让原因" autoHeight onChange={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})}/> }>
+                    转让原因
+                </List.Item> */}
+                <List.Item
+                    extra={ <Text>{this.dateString}</Text> }>
+                    转让时间
+                </List.Item>
+                <TextareaItem rows={4} style={{fontSize: 15, margin: 5}} placeholder="请填写转让原因" autoHeight onChange={(v) => this.setState({params: {...this.state.params, amoiExplain:v}})}/> 
                 {/* <TouchableHighlight onPress={this.choosePic.bind(this)} underlayColor="#eee" style={{margin: 20, width:"30%", height: 50}}>
                     <Image source={this.avatarSource} style={{height:50, width: "100%", alignSelf:'center',}} />
                 </TouchableHighlight> */}
