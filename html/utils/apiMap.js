@@ -1,6 +1,9 @@
 const server={
-    host: "http://118.25.24.82",
-    port: ":8089"
+    // host: "http://118.25.24.82",
+    // port: ":8089"
+
+    host: "http://101.132.150.0",
+    port: ":8066" 
 }
 
 const lesServer= {

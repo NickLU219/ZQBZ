@@ -74,7 +74,6 @@ class MessagePage extends React.Component {
 	
 	render() {  
 		const {rows} = this.props
-		// this.setState({refreshing:false})
 		return (  
 			<View >
 				<SearchBar
@@ -123,13 +122,14 @@ class MessagePage extends React.Component {
 								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:2}}>操作人</Text>
 								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:3}}>{item.aliActPersonName}</Text>								
 							</View>
-							<View style={{flex:1, flexDirection:"row"}}>
-								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:2}}>操作时间</Text>
-								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:3}}>{item.aliActTime}</Text>								
-							</View>
+							
 							<View style={{flex:1, flexDirection:"row"}}>
 								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:2}}>操作内容</Text>
 								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:3}}>{item.aliActDescription}</Text>								
+							</View>
+							<View style={{flex:1, flexDirection:"row"}}>
+								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:2}}>操作时间</Text>
+								<Text style={{marginLeft:10,marginTop:5, textAlign:"left", flex:3}}>{item.aliActTime}</Text>								
 							</View>
 						</View>
 				)}

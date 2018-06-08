@@ -4,7 +4,7 @@ import {SearchBar, WhiteSpace } from 'antd-mobile'
 import API from '../../utils/apiMap'
 import { connect} from 'react-redux';
 
-import { getNewData } from '../action' 
+import { getNewData,  updateGridPage, didUpdateGridPage } from '../action' 
 
 
 class GridPage extends React.Component {
@@ -15,10 +15,8 @@ class GridPage extends React.Component {
         }
         
         const { getNewData, navigation, userinfo, token } = this.props
-        // console.log(userinfo)
         const {key} = navigation.state.params
         console.log("key", key)
-        // let med = ()=>{}
         switch (key){
             case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
@@ -40,9 +38,7 @@ class GridPage extends React.Component {
     zicha = (key,item)=> {
         if (key != "Search"){ 
             return 
-                // (<View style={{height:30,flex:1,flexDirection:"row",alignItems:"center"}}>
                     <Text style={{fontSize:15,flex:5,color:"black",marginLeft:20}}>资产编号：{item.aiCode}</Text>
-                {/* </View>) */}
             }
         else
             return <View></View> 
@@ -53,12 +49,11 @@ class GridPage extends React.Component {
 
     clear = () => {
         this.setState({ value: '' });
-    }
-    submitWithKW=()=>{
         const { getNewData, navigation, userinfo, token } = this.props
         const {key} = navigation.state.params
+        console.log("key", key)
         switch (key){
-            case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
             case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token});};break
             case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token});};break
@@ -66,8 +61,44 @@ class GridPage extends React.Component {
             case "Search": {getNewData(API.homeGrid.search,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});}
             case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});};break
         }
-    }
     
+    }
+    submitWithKW=()=>{
+        const { getNewData, navigation, userinfo, token } = this.props
+        const {key} = navigation.state.params
+        switch (key){
+            case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});break
+            case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Deal": {getNewData(API.homeGrid.deal,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value});};break
+            case "Search": {getNewData(API.homeGrid.search,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value, aiUsePersonId:userinfo.oeId});}
+            case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiName:this.state.value, aiUsePersonId:userinfo.oeId});};break
+        }
+    }
+    componentWillMount() {
+        console.log("gridpage componentWillMount")
+    }
+    shouldComponentUpdate(n) {
+        console.log(n)
+        if(n.updateGridpage){
+            const { getNewData, navigation, userinfo, token, didUpdateGridPage } = this.props
+            didUpdateGridPage()
+            const {key} = navigation.state.params
+            console.log("key", key)
+            switch (key){
+                case "Get": {getNewData(API.homeGrid.get,{aiUseDw: userinfo.odDwId,token:token});};break
+                case "Return": getNewData(API.homeGrid.return,{aiUseDw: userinfo.odDwId,token:token});break
+                case "Change": {getNewData(API.homeGrid.change,{aiUseDw: userinfo.odDwId,token:token});};break
+                case "Repiar": {getNewData(API.homeGrid.repiar,{aiUseDw: userinfo.odDwId,token:token});};break
+                case "Deal": {getNewData(API.homeGrid.deal,{aiUseDw: userinfo.odDwId,token:token});};break
+                case "Search": {getNewData(API.homeGrid.search,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});}
+                case "Mine": {getNewData(API.homeGrid.mine,{aiUseDw: userinfo.odDwId,token:token, aiUsePersonId:userinfo.oeId});};break
+            }
+        }
+        console.log("gridpage shouldComponentUpdate", n)
+        return true
+    }
     render() {
         const {rows, navigation} = this.props;
         const {key} = navigation.state.params
@@ -133,10 +164,13 @@ export default GridPageContainer = connect(
     (state)=>({
         rows: state.gridReducer.rows,
         userinfo : state.homeReducer.userinfo,
-        token: state.homeReducer.token
+        token: state.homeReducer.token,
+        updateGridpage: state.gridReducer.updateGridpage
 	}),
 	(dispatch)=>({
-		getNewData: (url,params) => {dispatch(getNewData(url,params))}
+        getNewData: (url,params) => {dispatch(getNewData(url,params))}, 
+        updateGridPage: () => {dispatch(updateGridPage())},
+        didUpdateGridPage: () => {dispatch(didUpdateGridPage())}
 	})
 )(GridPage)
 

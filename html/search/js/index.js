@@ -16,7 +16,7 @@ class MyList extends React.Component {
 		super(props)
 		
 		this.state = {
-			aiName: '',
+			value: '',
 			refreshing: false,
 			page:1,
 			maxPage:0
@@ -27,12 +27,12 @@ class MyList extends React.Component {
 		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, start: 1, end: 11})
 	}
 
-	onChange = (aiName) => {
-		this.setState({ aiName });
+	onChange = (value) => {
+		this.setState({ value });
 	}
 
 	clear = () => {
-		this.setState({ aiName: '' });
+		this.setState({ value: '' });
 
 		const { getNewData,userinfo,token } = this.props
 		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, start: 1, end: 11})
@@ -44,7 +44,7 @@ class MyList extends React.Component {
 	}
 	getNewDataWithSearch = (value) => {
 		const { getNewData,userinfo,token } = this.props
-		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName, start: 1, end: 11})
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.value, start: 1, end: 11})
 	}
 	_onRefresh= () => {
 		this.setState({
@@ -52,12 +52,12 @@ class MyList extends React.Component {
 			page:1
 		})
 		const { getNewData,userinfo,token } = this.props
-		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName, start: 1, end: 11})
+		getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.value, start: 1, end: 11})
 	}
 	_onEndReached= () => {
 		const { getData,userinfo,token } = this.props
 		if (this.state.page<= this.state.maxPage)
-			getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.aiName,start: 1+10*(this.state.page), end: 11+10*(this.state.page)})
+			getNewData(API.zichan_list, {token,aiUseDw:userinfo.odDwId, aiName:this.state.value,start: 1+10*(this.state.page), end: 11+10*(this.state.page)})
 		else
 			Toast.info("没有更多了",0.5,()=>{},true)
 		this.setState({page:this.state.page+1})
@@ -72,13 +72,11 @@ class MyList extends React.Component {
 		return (
 			<View>
 				<SearchBar
-				value={this.state.aiName}
-				// defaultValue={this.state.aiName}
+				defaultValue={this.state.value}
 				placeholder="搜索"
 				onSubmit={this.getNewDataWithSearch}
 				onCancel={this.clear}
 				onChange={this.onChange}
-				// showCancelButton
 				/>
 				<FlatList
 				// ListFooterComponent={this.renderFooter}

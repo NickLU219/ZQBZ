@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableHighlight } from 're
 import { List, WhiteSpace, InputItem, Button, Picker, Toast, TextareaItem } from 'antd-mobile'
 
 import { connect } from 'react-redux'
-import { SubmitScrap ,getDeptList, getUserList, ClearMsg, uploadFile, getActId } from '../action'
+import { SubmitScrap ,getDeptList, getUserList, ClearMsg, uploadFile, getActId, updateGridPage } from '../action'
 import API from '../../utils/apiMap';
 
 import Basic from './basic'
@@ -55,9 +55,9 @@ class ScrapPage extends Basic {
         return true
     }
     render() {
-        const {msg} = this.props
+        const {msg, updateGridPage} = this.props
         if(msg === "操作成功") {
-            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack()}, true)
+            Toast.success("操作成功", 1, ()=>{this.props.navigation.goBack();updateGridPage()}, true)
         }
         const {userinfo} = this.props
         return (
@@ -105,5 +105,6 @@ export default connect(
         uploadFile: (url,params) => {dispatch(uploadFile(url,params))},
         ClearMsg: (msg) => {dispatch(ClearMsg(msg))},
         getActId: (url,params) => {dispatch(getActId(url,params))},
+        updateGridPage: () => {dispatch(updateGridPage())},
     })
 )(ScrapPage)

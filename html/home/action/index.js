@@ -22,6 +22,9 @@ const uploadFileAction = () => ({type: "UPLOAD_FILE"})
 
 const getActIdAction = (actId, aliId, token) => ({type: "GET_ACTID", actId, aliId, token})
 
+export const updateGridPage = () => ({type: "UPDATE_GRIDPAGE", updateGridpage: true})
+export const didUpdateGridPage = () => ({type: "DID_UPDATE_GRIDPAGE", updateGridpage: false})
+
 export const ClearMsg = (msg) => ({type: "CLEAR_MSG",msg})
 
 export const getNewData= (url,params)=>(dispatch, getState) => {

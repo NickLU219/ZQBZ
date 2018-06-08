@@ -48,7 +48,7 @@ export const doUpdateCheck = (url)=> (dispatch, getState) => {
     for(let k in params){  
         formData.append(k, params[k]);  
     }  
-    console.log('checkupdate data',formData)
+    console.log('checkupdate data',formData,url)
     dispatch( 
         dispatch=>
             fetch(url, {
