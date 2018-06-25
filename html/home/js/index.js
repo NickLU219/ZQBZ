@@ -163,7 +163,7 @@ class HomeGrid extends React.Component {
             case "资产变更": this.props.props.navigation.navigate("Change", {key: "Change"});break;
             case "资产维修": this.props.props.navigation.navigate("Repiar", {key: "Repiar"});break;
             case "资产报废": this.props.props.navigation.navigate("Deal", {key: "Deal"});break;
-            case "资产自查": this.props.props.navigation.navigate("Search", {key: "Search"});break;
+            // case "资产自查": this.props.props.navigation.navigate("Search", {key: "Search"});break;
             case "我的资产": this.props.props.navigation.navigate("Mine", {key: "Mine"});break;
         }
     }
@@ -189,10 +189,10 @@ class HomeGrid extends React.Component {
                 icon: <Image source={require('../img/list05.png')}/>,
                 text: '资产报废'
             },
-            {
-                icon: <Image source={require('../img/list06.png')}/>,
-                text: '资产自查'
-            },
+            // {
+            //     icon: <Image source={require('../img/list06.png')}/>,
+            //     text: '资产自查'
+            // },
             {
                 icon: <Image source={require('../img/list07.png')}/>,
                 text: '我的资产'
@@ -477,12 +477,12 @@ export default StackNavigator(
                 headerTitle: "资产报废"
             }
         },
-        Search: {
-            screen: GridPage,
-			navigationOptions:{
-                headerTitle: "资产自查"
-            }
-        },
+        // Search: {
+        //     screen: GridPage,
+		// 	navigationOptions:{
+        //         headerTitle: "资产自查"
+        //     }
+        // },
         Mine: {
             screen: GridPage,
 			navigationOptions:{

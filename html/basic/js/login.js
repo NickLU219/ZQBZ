@@ -31,6 +31,8 @@ class LoginPage extends React.Component {
     doLogIn= ()=>{
         const { doUserLogin, ClearMsg } = this.props
         Toast.loading("",0.6,()=>{ClearMsg()},true)
+        this.state.username = (this.state.username.indexOf("@js")>-1) ? this.state.username : (this.state.username+"@js")
+        console.log(this.state)
         doUserLogin(API.user_login, {userId:this.state.username, pwd:this.state.userpwd})
     }
     componentWillUpdate(n){

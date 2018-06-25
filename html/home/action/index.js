@@ -62,26 +62,32 @@ export const getDeptList = (url,params) => (dispatch, getState) => {
             })
             .then((response)=> response.json())
             .then((responseText)=>{
-                // console.log("responseText",responseText)
                 let dept = responseText.data
                 for (i in dept) {
                     dept[i].value = dept[i]["odId"]
                     dept[i].label = dept[i]["odName"]
-                    if (dept[i].children.length>0) {
-                        let dept2 = dept[i].children
-                        for (i in dept2) {
-                            dept2[i].value = dept2[i]["odId"]
-                            dept2[i].label = dept2[i]["odName"]
-                            if (dept2[i].children.length>0) {
-                                let dept3 = dept2[i].children
-                                for (i in dept3) {
-                                    dept3[i].value = dept3[i]["odId"]
-                                    dept3[i].label = dept3[i]["odName"]
-                                }
-                            }
+                    const tmp = {...dept[i]}
+                    tmp.children = []
+                    dept[i].children = [tmp, ...dept[i].children]
+                    
+                    let dept2 = dept[i].children
+                    console.log("after2", dept2)
+                    for (j in dept2) {
+                        dept2[j].value = dept2[j]["odId"]
+                        dept2[j].label = dept2[j]["odName"]
+                        const tmp2 = {...dept2[j]}
+                        tmp2.children = []
+                        dept2[j].children = [tmp2,...dept2[j].children]
+
+                        let dept3 = dept2[j].children
+                        console.log("after3", dept3)
+                        for (k in dept3) {
+                            dept3[k].value = dept3[k]["odId"]
+                            dept3[k].label = dept3[k]["odName"]
                         }
                     }
                 }
+                console.log("after", dept)
                 dispatch(getDeptAction(dept, responseText.token))  
                 // dispatch(getDeptAction(responseText.data, responseText.token))  
             })

@@ -75,12 +75,6 @@ export const getInfoList= (url,params)=>(dispatch, getState) => {
 }
 
 export const getPZ= (url,params)=>(dispatch, getState) => {
-    // console.log("url:",url,"params:", params)
-    // var formData = new FormData();  
-    // for(let k in params){  
-    //     formData.append(k, params[k]);  
-    // }  
-    // console.log(url, formData)
     const file_id = params['file_id']
     let path = ""
     let pro = []
